@@ -1,0 +1,262 @@
+package util;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+import carregadores.CarregadorStoplist;
+
+public class Tratamento {
+
+	/**
+	 * Este m�todo verifica se uma string � um n�mero.
+	 * @param string a ser verificada.
+	 * @return false se n�o � n�mero e true se � n�mero.
+	 */
+	public static boolean ehNumero(String termo){
+		boolean ehNumero = false;
+		char caractere;
+		int tam = termo.length();
+
+		for (int i=0; i<tam; i++) {
+			caractere = termo.charAt(i);
+			if (caractere == '1' || caractere == '2' || caractere == '3' || caractere == '4' || caractere == '5' || caractere == '6'
+					|| caractere == '7' || caractere == '8' || caractere == '9' || caractere == '0')
+				ehNumero = true;
+			else {
+				ehNumero = false;
+				break;
+			}
+		}
+		return ehNumero;
+
+	}
+
+	/**
+	 * 	Este m�todo substitui todos os caracteres "c" por "c2" na string "s".
+	 * @param c caracter a ser substitu�do.
+	 * @param c2 novo caracter.
+	 * @param s string a ser substitu�da.
+	 * @return nova string ap�s substitui��o.
+	 */
+	public static String replaceAll (char c, char c2, String s){
+		String novaString = "";
+		for (int i=0;i<s.length();i++){
+			if (s.charAt(i)==c) novaString+=c2;
+			else novaString+=s.charAt(i);
+		}
+		return novaString;
+	}
+
+	/**
+	 * Este m�todo retira a pontua��o de textos na l�ngua portuguesa, exceto: _ < >.
+	 * @param palavra � a palavra do texto que ser� percorrida para remo��o de pontua��o.
+	 * @return palavra sem pontua��o.
+	 */
+	public static String removerPontuacao (String palavra){
+		palavra = palavra.trim();
+		int tam = palavra.length();
+		String palavra_nova="";
+		for (int y=0; y<tam; y++){
+			if (palavra.charAt(y)==('.') || palavra.charAt(y)==(',') || palavra.charAt(y)==(';') || 
+					palavra.charAt(y)==(':') || palavra.charAt(y)==('-') || palavra.charAt(y)==('"') ||
+					palavra.charAt(y)==('`') || palavra.charAt(y)==('`') || palavra.charAt(y)==('\'') || 
+					palavra.charAt(y)==('(') || palavra.charAt(y)==('\\') || palavra.charAt(y)==('/') ||
+					palavra.charAt(y)==(')') || palavra.charAt(y)==('[') || palavra.charAt(y)==(']') ||
+					palavra.charAt(y)==('{') || palavra.charAt(y)==('}') ||	palavra.charAt(y)==('|'))
+				palavra_nova = palavra_nova;
+			else {
+				palavra_nova = palavra_nova+palavra.charAt(y);
+			}    	  
+		}
+		return palavra_nova;
+	}
+
+	/**
+	 * Este m�todo retira acento de textos na l�ngua portuguesa.
+	 * @param palavra � a palavra do texto que ser� percorrida para remo��o de acentos.
+	 * @return palavra sem acento.
+	 */
+	public static String removerAcentos (String palavra){
+		palavra = palavra.trim();
+		int tam = palavra.length();
+		String palavra_nova="";
+		for (int y=0; y<tam; y++){
+			if (palavra.charAt(y)==('à') || palavra.charAt(y)==('ã') || palavra.charAt(y)==('á') || 
+					palavra.charAt(y)==('ä') || palavra.charAt(y)==('â')) palavra_nova =palavra_nova+'a';
+			else if (palavra.charAt(y)==('À') || palavra.charAt(y)==('Ã') || palavra.charAt(y)==('Á') || 
+					palavra.charAt(y)==('Ä') || palavra.charAt(y)==('Â')) palavra_nova =palavra_nova+'A';
+			else if (palavra.charAt(y)==('é') || palavra.charAt(y)==('è') ||
+					palavra.charAt(y)==('ê') || palavra.charAt(y)==('ë')) palavra_nova =palavra_nova+'e';
+			else if (palavra.charAt(y)==('É') || palavra.charAt(y)==('È') ||
+					palavra.charAt(y)==('Ê') || palavra.charAt(y)==('Ë')) palavra_nova =palavra_nova+'E';
+			else if (palavra.charAt(y)==('í') || palavra.charAt(y)==('ì') ||
+					palavra.charAt(y)==('î') || palavra.charAt(y)==('ï')) palavra_nova =palavra_nova+'i';
+			else if (palavra.charAt(y)==('Í') || palavra.charAt(y)==('Ì') ||
+					palavra.charAt(y)==('Î') || palavra.charAt(y)==('Ï')) palavra_nova =palavra_nova+'I';
+			else if (palavra.charAt(y)==('ó') || palavra.charAt(y)==('ò') || palavra.charAt(y)==('õ') ||
+					palavra.charAt(y)==('ô') || palavra.charAt(y)==('ö')) palavra_nova =palavra_nova+'o';
+			else if (palavra.charAt(y)==('Ó') || palavra.charAt(y)==('Ò') || palavra.charAt(y)==('Õ') ||
+					palavra.charAt(y)==('Ô') || palavra.charAt(y)==('Ö')) palavra_nova =palavra_nova+'O';
+			else if (palavra.charAt(y)==('ú') || palavra.charAt(y)==('ù') ||
+					palavra.charAt(y)==('û') || palavra.charAt(y)==('ü')) palavra_nova =palavra_nova+'u';
+			else if (palavra.charAt(y)==('Ú') || palavra.charAt(y)==('Ù') ||
+					palavra.charAt(y)==('Û') || palavra.charAt(y)==('Ü')) palavra_nova =palavra_nova+'U';
+			else if (palavra.charAt(y)==('ç')) palavra_nova =palavra_nova+'c';
+			else if (palavra.charAt(y)==('Ç')) palavra_nova =palavra_nova+'C';
+			// remove barra para não dar erro na execução da NSP:
+			else if (palavra.charAt(y)==('/')) palavra_nova =palavra_nova;
+			else if (palavra.charAt(y)==(':')) palavra_nova =palavra_nova;			
+			else {
+				palavra_nova = palavra_nova+palavra.charAt(y);
+			}    	  
+		}
+		return palavra_nova;
+	}
+
+
+	/**
+	 * Este m�todo verifica se a string � uma stopword a partir de uma stoplist dada previamente.
+	 * @param string a ser verificada.
+	 * @return retorna true se a string � uma stopword.
+	 */
+	public static boolean ehStopword(String string) {
+		if (string==null || string.equals("")) return true;
+		string = string.trim().toLowerCase();
+		if (!CarregadorStoplist.listaStoplist.containsKey(string))
+			if (string.length() > 1)
+				return false;
+		return true;
+	}
+	/**
+	 * Este m�todo remove a(s) stopword(s) do in�cio do candidato a termo (ct).
+	 * @param sintagma
+	 * @return
+	 */
+	public static String removerStopwordDoInicio(String sintagma) {
+		StringTokenizer st = new StringTokenizer(sintagma.trim(), "<>");
+		String restante="";
+		int gramas = 0;
+		boolean iniciocomstopword = true,
+				jaharmazenou = false;
+		while (st.hasMoreTokens()) {
+			gramas++;
+			String next = st.nextToken();
+			if (!next.equals("")) {
+				iniciocomstopword = iniciocomstopword && ehStopword(next);
+				if (!iniciocomstopword) {
+					if (gramas > 1 && jaharmazenou) {
+						restante += "<>" + next;
+					}
+					else {
+						restante += next;
+						jaharmazenou = true;
+					}
+				}
+			}
+		}
+
+		return restante.trim();
+	}
+
+	public static String removerStopwordDoFinal(String sintagma) {
+		String restante = "";
+		String [] palavras = sintagma.split("<>");
+		int tam = palavras.length,
+				gramas = 0;
+		boolean finalizar = false,
+				jaharmazenou = false;
+
+		for (int i=tam-1; i>=0 && !finalizar; i--) {
+			if (!ehStopword(palavras[i])) {
+				finalizar = true;
+				for (int j=0; j<=i; j++) {
+					gramas++;
+					if (gramas > 1 && jaharmazenou)
+						restante += "<>" + palavras[j];
+					else {
+						restante += palavras[j];
+						jaharmazenou = true;
+					}
+				}
+
+			}
+		}
+
+		return restante.trim();
+	}
+
+	/**
+	 * Este m�todo verifica se j� existe o arquivo no diret�rio (caminho) passado por
+	 * par�metro, caso N�O exista, cria-o.
+	 * @param caminho � o arquivo no diret�rio a ser criado.
+	 * @throws IOException 
+	 */
+	public static void criarArquivo (File arquivo) throws IOException{
+		try{
+			if (arquivo.exists() == false)	
+				arquivo.createNewFile();
+		}catch (Exception e){
+			e.printStackTrace();
+			System.out.println("N�o foi poss�vel criar o arquivo: " + arquivo.toString());
+		}
+	}
+
+	/**
+	 * Entra com um candidato a termo (ct) e remove palavras que s�o formadas totalmente
+	por n�meros ou palavras formadas por apenas 1 caractere al�m de
+	outros tratamentos especificados abaixo.
+	Caso sobre alguma(s) palavra(s) na string, retorna-a,
+	sen�o, retorna a string vazia.
+	 * @param ct candidato a termo a ser tratado.
+	 * @return a string tratada.
+	 */
+	public static String tratar_termo(String ct) {
+		String resultado = "";
+
+		ct = ct.trim().toLowerCase().replaceAll(" ", "<>");
+		ct = Tratamento.removerAcentos(ct); // remove os acentos do termo
+		ct = Tratamento.removerPontuacao(ct); // remove as pontua��es do termo, exceto: _ < >
+		ct = ct.replaceAll("_", "<>");
+
+		if (ct.contains("<>")) {
+			StringTokenizer st = new StringTokenizer(ct, "<>");
+
+			while (st.hasMoreTokens()) {
+				String tokens = st.nextToken();
+				if (tokens.isEmpty()) continue;
+				if (!Tratamento.ehNumero(tokens) && tokens.trim().length()>1)
+					resultado += tokens + "<>";
+				//TODO confirmar o que fazer nesse caso: publicacao jornalistica DE A sociedade brasileira de computacao
+			}
+		}
+		else {
+			if (!Tratamento.ehNumero(ct) && ct.trim().length()>1)
+				resultado += ct;
+		}
+
+		resultado = Tratamento.removerStopwordDoInicio(resultado); // verifica se inicia (1� palavra) com stopword e, caso afirmativo, remove-a
+		resultado = Tratamento.removerStopwordDoFinal(resultado); // verifica o termo termina com stopword (�ltima palavra) e, caso afirmativo, remove-a
+
+		return resultado;	
+	}
+
+	/**
+	 * Esse m�todo recebe uma String qualquer e retorna verdadeiro se a mesma cont�m qualquer caracter estranho.
+	 * @param grama String a ser testada.
+	 * @return verdadeiro se a string testada n�o cont�m caracter estranho e false se cont�m.
+	 */
+	public static boolean temCaracterEstranho(String grama) {
+
+		String allowed="abcdefghijklmnopqrstuvwxyz\n";
+		grama = grama.toLowerCase();
+
+		for (int i=0; i < grama.length(); i++) {
+			String ch = String.valueOf(grama.charAt(i));
+			if (!allowed.contains(ch)) 
+				return true;
+		}
+		return false; // a string n�o cont�m caracter estranho.
+	}
+
+}

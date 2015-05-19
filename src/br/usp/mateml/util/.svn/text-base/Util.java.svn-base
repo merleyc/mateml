@@ -1,0 +1,274 @@
+package util;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import output.NodoLista;
+
+public class Util {
+
+	/**
+	 * Esse m�todo imprime as chaves de um hash passado por par�metro.
+	 * @param hash � o hash a ser impresso.
+	 */
+	public static void imprimeHashBoolean(HashMap<String, Boolean> hash ){
+		if (hash == null) {
+			System.out.println("O hash � nulo e n�o pode ser impresso.");
+			return;
+		}
+		Set<String> set = hash.keySet();
+		Object[] array = set.toArray();
+		for (int i=0; i<array.length; i++) {
+			System.out.println(array[i]);
+		}
+	}
+	
+	/**
+	 * Esse método imprime as chaves de um hash passado por parâmetro e seu valor String.
+	 * @param hash eh o hash a ser impresso.
+	 */
+	public static void imprimeHashDeString(HashMap<String, String> hash ){
+		if (hash == null) {
+			System.out.println("O hash é nulo e não pode ser impresso.");
+			return;
+		}
+		Set<String> set = hash.keySet();
+		Object[] array = set.toArray();
+		for (int i=0; i<array.length; i++) {
+			System.out.println(array[i] + ": " + hash.get(array[i]));
+		}
+	}
+
+	/**
+	 * Esse m�todo imprime as chaves de um hash passado por par�metro.
+	 * @param hash � o hash a ser impresso.
+	 */
+	public static void imprimeHashStringHash(HashMap<String, HashMap<String, Integer>> hash ){
+		if (hash == null) {
+			System.out.println("O hash � nulo e n�o pode ser impresso.");
+			return;
+		}
+		Set<String> set = hash.keySet();
+		Object[] array = set.toArray();
+		for (int i=0; i<array.length; i++) {
+			System.out.print(array[i]+": ");
+
+			Set<String> set2 = hash.get(array[i]).keySet();
+			Object[] array2 = set2.toArray();
+			for (int j=0; j<array2.length; j++) {
+				System.out.print(array2[j]+", ");
+
+			}
+		}
+	}
+
+	/**
+	 * Esse m�todo imprime as chaves de um hash passado por par�metro e seus respectivos conte�dos string.
+	 * @param hash � o hash a ser impresso.
+	 */
+	public static void imprimeHashString(HashMap<String, String> hash ){
+		if (hash == null) {
+			System.out.println("O hash � nulo e n�o pode ser impresso.");
+			return;
+		}
+		Set<String> set = hash.keySet();
+		Object[] array = set.toArray();
+
+		for (int i=0; i<array.length; i++) {
+			String chave = (String)array[i];
+			String valor = hash.get(chave);
+			System.out.println(chave + " " + valor);
+		}
+	}
+
+	/**
+	 * Esse m�todo imprime as chaves de um hash passado por par�metro e seus respectivos conte�dos string.
+	 * @param hash � o hash a ser impresso.
+	 */
+	public static void imprimeHashChar(HashMap<String, Character> hash ){
+		if (hash == null) {
+			System.out.println("O hash � nulo e n�o pode ser impresso.");
+			return;
+		}
+		Set<String> set = hash.keySet();
+		Object[] array = set.toArray();
+
+		for (int i=0; i<array.length; i++) {
+			String chave = (String)array[i];
+			Character valor = hash.get(chave);
+			System.out.println(chave + " " + valor);
+		}
+	}
+
+	/**
+	 * Esse m�todo imprime as chaves de um hash passado por par�metro e seus respectivos conte�dos string.
+	 * @param hash � o hash a ser impresso.
+	 */
+	public static void imprimeHashStringInteger(HashMap<String, Integer> hash ){
+		if (hash == null) {
+			System.out.println("O hash � nulo e n�o pode ser impresso.");
+			return;
+		}
+		Set<String> set = hash.keySet();
+		Object[] array = set.toArray();
+
+		for (int i=0; i<array.length; i++) {
+			String chave = (String)array[i];
+			Integer valor = hash.get(chave);
+			System.out.println(chave + " " + valor);
+		}
+	}
+
+	/**
+	 * Esse m�todo imprime as chaves de um hash passado por par�metro e seus respectivos conte�dos.
+	 * @param hash � o hash a ser impresso.
+	 */
+	public static void imprimeHash(HashMap<String, NodoLista> hash ){
+		if (hash == null) {
+			System.out.println("O hash � nulo e n�o pode ser impresso.");
+			return;
+		}
+		Set<String> set = hash.keySet();
+		Object[] array = set.toArray();
+		System.out.println("Tamanho do hash impresso: " + array.length);
+		for (int i=0; i<array.length; i++) {
+			NodoLista nodo = hash.get(array[i]);
+			System.out.println("Nodo: " + nodo.termo + " - " +	nodo.freq + " - " +	nodo.compGram + " - " + nodo.tamGram + " - " + nodo.tamCorpus + " - " + nodo.df);
+		}
+	}
+
+	/**
+	 * Esse m�todo imprime os valores de um vetor.
+	 * @param vetor � o vetor a ser impresso.
+	 */
+	public static void imprimeVetor(Vector<String> vetor ){
+		if (vetor == null) {
+			System.out.println("O vetor � nulo e n�o pode ser impresso.");
+			return;
+		}
+
+		int tam = vetor.size();
+		for (int i=0; i<tam; i++) {
+			System.out.println(vetor.get(i));
+		}
+	}
+
+	/**
+	 * Esse m�todo conta quantos gramas o candidato a termo cont�m, ou seja,
+	 * se � unigrama tem um grama; se � bigrama tem dois gramas, etc.
+	 * @param ct candidato a termo.
+	 * @return quantidade de gramas do candidato a termo (ct)
+	 */
+	public static int contarGramas(String ct){
+		StringTokenizer tokenizer = new StringTokenizer(ct,"<>");
+		int gramas = 0;
+		while(tokenizer.hasMoreTokens()){
+			String token = tokenizer.nextToken().trim();
+			if(!token.equals(""))gramas++;
+		}
+		return gramas;
+	}
+
+	/**
+	 * Esse m�todo verifica se um ct (candidato a termo) cont�m em um n� de um hash.
+	 * @param nodo n� do hash.
+	 * @param ct candidato a termo.
+	 * @return verdadeiro se o ct est� no hash e falso caso contr�rio.
+	 */
+	public static boolean contemGrama(NodoLista nodo, String ct){
+		StringTokenizer tokenizer = new StringTokenizer(nodo.termo,"<>");
+		ArrayList<String> gramas_nodo_termo = new ArrayList<String>(); 
+		while(tokenizer.hasMoreTokens()){
+			String token = tokenizer.nextToken().trim();
+			if(!token.equals(""))gramas_nodo_termo.add(token);
+		}
+
+		tokenizer = new StringTokenizer(ct,"<>");
+		ArrayList<String> gramas_termo = new ArrayList<String>(); 
+		while(tokenizer.hasMoreTokens()){
+			String token = tokenizer.nextToken().trim();
+			if(!token.equals(""))gramas_termo.add(token);
+		}
+
+		for(int i = 0; i < gramas_nodo_termo.size();i++){
+			int j = 0;
+			while(j < gramas_termo.size() && i+j < gramas_nodo_termo.size()&& 
+					gramas_nodo_termo.get(i+j).equals(gramas_termo.get(j))){
+				j++;
+			}
+			if (j==gramas_termo.size()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static Vector<String> armazenarPalavrasDoTexto(String nomeArquivo) {
+		Vector<String> palavrasDoTexto = new Vector<String>();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(nomeArquivo));
+			String linha = in.readLine(),
+					palavra = "";
+			StringTokenizer st = null;
+
+			while (linha != null) {
+				if (!linha.trim().equals("")) {
+					st = new StringTokenizer(linha, " ");
+					while (st.hasMoreTokens()) {
+						palavra = st.nextToken().trim().toLowerCase();
+						palavra = Tratamento.removerAcentos(palavra);
+						palavra = Tratamento.removerPontuacao(palavra);
+						palavrasDoTexto.add(palavra);
+					}
+				}
+				linha = in. readLine();
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return palavrasDoTexto;
+	}
+
+	public static HashMap<String, Boolean> armazenarPalavrasDoTextoEmHash(String nomeArquivo) {
+		HashMap<String, Boolean> palavrasDoTexto = new HashMap<String, Boolean>();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(nomeArquivo));
+			String linha = in.readLine(),
+					palavra = "";
+			StringTokenizer st = null;
+			int freq = 0;
+
+			while (linha != null) {
+				if (!linha.trim().equals("")) {
+					st = new StringTokenizer(linha, " ");
+					while (st.hasMoreTokens()) {
+						palavra = st.nextToken().trim().toLowerCase();
+						palavra = Tratamento.removerAcentos(palavra);
+						palavra = Tratamento.removerPontuacao(palavra);
+						if (!palavra.equals("")) {
+							palavrasDoTexto.put(palavra, true);
+						}
+					}
+
+				}
+				linha = in. readLine();
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return palavrasDoTexto;
+	}
+}
