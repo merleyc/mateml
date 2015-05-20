@@ -48,7 +48,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import br.usp.mateml.preprocessing.Treatment;
+import br.usp.mateml.steps.preprocessing.Treatment;
 
 
 public class SparseMatrix {

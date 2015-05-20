@@ -10,18 +10,18 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import br.usp.mateml.feature_extraction.ATF;
-import br.usp.mateml.feature_extraction.Control;
-import br.usp.mateml.feature_extraction.CorporaData;
-import br.usp.mateml.feature_extraction.GlossEx;
-import br.usp.mateml.feature_extraction.NodeTHD;
-import br.usp.mateml.feature_extraction.RIDF;
-import br.usp.mateml.feature_extraction.TDS;
-import br.usp.mateml.feature_extraction.THD;
-import br.usp.mateml.feature_extraction.Weirdness;
-import br.usp.mateml.feature_extraction.taxonomy.NodeFeatureOfTax;
 import br.usp.mateml.main.GlobalVariables;
-import br.usp.mateml.preprocessing.Treatment;
+import br.usp.mateml.steps.feature_extraction.ATF;
+import br.usp.mateml.steps.feature_extraction.Control;
+import br.usp.mateml.steps.feature_extraction.CorporaData;
+import br.usp.mateml.steps.feature_extraction.GlossEx;
+import br.usp.mateml.steps.feature_extraction.NodeFeatureOfTax;
+import br.usp.mateml.steps.feature_extraction.NodeTHD;
+import br.usp.mateml.steps.feature_extraction.RIDF;
+import br.usp.mateml.steps.feature_extraction.TDS;
+import br.usp.mateml.steps.feature_extraction.THD;
+import br.usp.mateml.steps.feature_extraction.Weirdness;
+import br.usp.mateml.steps.preprocessing.Treatment;
 import br.usp.mateml.util.TestDetector;
 
 public class Candidates {

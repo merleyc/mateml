@@ -11,8 +11,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import br.usp.mateml.candidates.NodeCandidate;
-import br.usp.mateml.feature_extraction.taxonomy.NodeFeatureOfTax;
-import br.usp.mateml.preprocessing.Treatment;
+import br.usp.mateml.steps.feature_extraction.NodeFeatureOfTax;
+import br.usp.mateml.steps.preprocessing.Treatment;
 
 
 public class Util {

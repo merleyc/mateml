@@ -2,12 +2,12 @@ package br.usp.mateml.main;
 
 import java.util.Scanner;
 
-import br.usp.mateml.feature_extraction.Features;
 import br.usp.mateml.loaders.PretextLoader;
 import br.usp.mateml.output.Output;
-import br.usp.mateml.preprocessing.DataRepresentation;
-import br.usp.mateml.preprocessing.WordProcessor;
-import br.usp.mateml.preprocessing.snowball.SpanishStemmer;
+import br.usp.mateml.steps.feature_extraction.Features;
+import br.usp.mateml.steps.preprocessing.DataRepresentation;
+import br.usp.mateml.steps.preprocessing.WordProcessor;
+import br.usp.mateml.steps.preprocessing.snowball.SpanishStemmer;
 
 public class MateML {
 
@@ -20,7 +20,7 @@ public class MateML {
 		mateml.extractTerms();
 	}
 
-	private void extractTerms() {
+	public void extractTerms() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Method for Automatic Term Extraction based on Machine Learning (MATE-ML).");
 		System.out.println("Enter the config file path or enter \"help\":\n");
@@ -72,18 +72,11 @@ public class MateML {
 			Features features = new Features();
 			features.calculateFeatures(1, GlobalVariables.candidates,
 					GlobalVariables.configuration, pretextLoader);
-			//calcularCaracteristicas(2, MatrizSaida.hashct_2gram);
-			//calcularCaracteristicas(3, MatrizSaida.hashct_3gram);
-
-			//MatrizSaida.filtrarCT ();
-
-			Output.gerarMatriz(GlobalVariables.configuration, GlobalVariables.candidates);
-
 		}
 	}
 
 	private void createOutput() {
-		// TODO Auto-generated method stub
+		Output.gerarMatriz(GlobalVariables.configuration, GlobalVariables.candidates);
 	}
 
 }

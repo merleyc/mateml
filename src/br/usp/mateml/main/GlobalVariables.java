@@ -1,10 +1,10 @@
 package br.usp.mateml.main;
 
 import br.usp.mateml.candidates.Candidates;
-import br.usp.mateml.feature_extraction.Features;
-import br.usp.mateml.feature_extraction.ReferenceList;
 import br.usp.mateml.loaders.ConfigurationLoader;
 import br.usp.mateml.loaders.StoplistLoader;
+import br.usp.mateml.steps.feature_extraction.Features;
+import br.usp.mateml.steps.feature_extraction.ReferenceList;
 
 public class GlobalVariables {
 

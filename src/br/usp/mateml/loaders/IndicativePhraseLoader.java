@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import br.usp.mateml.preprocessing.Treatment;
+import br.usp.mateml.steps.preprocessing.Treatment;
 import br.usp.mateml.util.TestDetector;
 
 

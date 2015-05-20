@@ -12,9 +12,9 @@ import weka.core.Instance;
 import weka.core.Instances;
 import br.usp.mateml.candidates.Candidates;
 import br.usp.mateml.candidates.NodeCandidate;
-import br.usp.mateml.feature_extraction.Control;
 import br.usp.mateml.loaders.ConfigurationLoader;
-import br.usp.mateml.preprocessing.Treatment;
+import br.usp.mateml.steps.feature_extraction.Control;
+import br.usp.mateml.steps.preprocessing.Treatment;
 
 public class Output {
 

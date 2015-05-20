@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import br.usp.mateml.main.GlobalVariables;
-import br.usp.mateml.preprocessing.Treatment;
+import br.usp.mateml.steps.preprocessing.Treatment;
 import br.usp.mateml.util.TestDetector;
 
 public class StoplistLoader {
