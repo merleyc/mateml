@@ -4,6 +4,8 @@
 This method treats the term extraction as a classification task, since the purpose of the extraction can be seen as classify candidates into terms or non-terms.
 Figure below shows four steps of MATE-ML, which are completely automated and allow to adapt them depending on the application in which the extracted terms will be used.
 
+![mate](https://cloud.githubusercontent.com/assets/10016650/7719226/99d0aa16-fe72-11e4-8dfe-74d0c7d4d8e2.png)
+
   Input: corpus, general language corpus (optional), external knowledge (corresponds to labeled words).  
   
   1. `Text preprocessing:` cleans and standardizes the input data, identifies POS (part-of-speech), remove stopwords, etc.  
