@@ -11,11 +11,6 @@ import br.usp.mateml.preprocessing.snowball.SpanishStemmer;
 
 public class MateML {
 
-	// Temporary files:
-	private static String arqDataSemClasse = "./data/discover_sem_classe.data";
-	private static String arqMatrizEsparsa = "./data/discoveresparsaAtribDoc1Gram.txt";
-	private static String arqTfidf = "./data/saidaTfIdf.txt";
-
 	/**
 	 * @param args
 	 */
