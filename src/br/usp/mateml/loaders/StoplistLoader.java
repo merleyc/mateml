@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import br.usp.mateml.main.GlobalVariables;
+import br.usp.mateml.steps.feature_extraction.ReferenceList;
 import br.usp.mateml.steps.preprocessing.Treatment;
 import br.usp.mateml.util.TestDetector;
 
@@ -15,8 +16,8 @@ public class StoplistLoader {
 
 	private final HashMap<String, Boolean> hash_stoplist = new HashMap<String, Boolean>();
 
-	public StoplistLoader(String pathStoplistFile, String pathReferenceList) {
-		loadStopwords(pathStoplistFile, pathReferenceList);
+	public StoplistLoader(String pathStoplistFile, ReferenceList referenceList) {
+		loadStopwords(pathStoplistFile, referenceList);
 	}
 
 	/**
@@ -24,16 +25,10 @@ public class StoplistLoader {
 	 * @param pathReferenceList 
 	 * @param caminho do arquivo .txt no formato da PreTexT contendo as stopwords.
 	 */
-	private void loadStopwords(String pathStoplistFile, String pathReferenceList) {		
+	private void loadStopwords(String pathStoplistFile, ReferenceList referenceList) {		
 		File arqStoplist = new File(pathStoplistFile);
 		boolean armazenouStopword = false;
-		boolean verifyRL = false;
-
-		if (!GlobalVariables.configuration.getCaminhoListaReferencia().equals("")) {
-			// it will set veerififyRL=true if the user gave some reference list:
-			verifyRL = true;
-		}
-
+		
 		try {
 			if (arqStoplist.exists() == false) {
 				System.out.println("Nao encontrou o arquivo de stopword: " + pathStoplistFile);
@@ -41,16 +36,18 @@ public class StoplistLoader {
 			}
 			String encoding = TestDetector.detectaEncodingImprimeArquivo(pathStoplistFile);
 			BufferedReader in;
-			if (encoding != null) 
+			if (encoding != null) {
 				in = new BufferedReader(new InputStreamReader(new FileInputStream(arqStoplist),encoding));
-			else in = new BufferedReader(new FileReader(arqStoplist));
+			} else {
+				in = new BufferedReader(new FileReader(arqStoplist));
+			}
 
 			//BufferedReader in = new BufferedReader(new FileReader(arqStoplist));
 			String line = in.readLine();
 
 			while (line != null) {
 				line = Treatment.tratar_termo(line, false);
-				if ( (!verifyRL) || ( verifyRL && (!GlobalVariables.referenceList.containsKey(line)) ) ) {
+				if ( GlobalVariables.referenceList == null || !GlobalVariables.referenceList.containsKey(line) ) {
 					hash_stoplist.put(line, true);
 				}
 				armazenouStopword = true;

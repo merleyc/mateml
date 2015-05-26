@@ -189,38 +189,39 @@ public class Treatment {
 	 */
 	public static String tratar_termo(String ct, boolean removerStopwords) {
 		String resultado = "";
+		//if (ct != null) {
 
-		ct = ct.trim().toLowerCase().replaceAll(" ", "<>");
-		ct = Treatment.removerAcentos(ct); // remove os acentos do termo
-		ct = Treatment.removerPontuacao(ct); // remove as pontuaï¿½ï¿½es do termo, exceto: _ < >
-		ct = ct.replaceAll("_", "<>");
+			ct = ct.trim().toLowerCase().replaceAll(" ", "<>");
+			ct = Treatment.removerAcentos(ct); // remove os acentos do termo
+			ct = Treatment.removerPontuacao(ct); // remove as pontuaï¿½ï¿½es do termo, exceto: _ < >
+			ct = ct.replaceAll("_", "<>");
 
-		if (ct.contains("<>")) {
-			StringTokenizer st = new StringTokenizer(ct, "<>");
+			if (ct.contains("<>")) {
+				StringTokenizer st = new StringTokenizer(ct, "<>");
 
-			while (st.hasMoreTokens()) {
-				String tokens = st.nextToken();
-				if (tokens.isEmpty()) continue;
-				if (!Treatment.ehNumero(tokens) && tokens.trim().length()>1)
-					resultado += tokens + "<>";
-				//TODO confirmar o que fazer nesse caso: publicacao jornalistica DE A sociedade brasileira de computacao
+				while (st.hasMoreTokens()) {
+					String tokens = st.nextToken();
+					if (tokens.isEmpty()) continue;
+					if (!Treatment.ehNumero(tokens) && tokens.trim().length()>1)
+						resultado += tokens + "<>";
+					//TODO confirmar o que fazer nesse caso: publicacao jornalistica DE A sociedade brasileira de computacao
+				}
 			}
-		}
-		else {
-			if (!Treatment.ehNumero(ct) && ct.trim().length()>1)
-				resultado += ct;
-		}
+			else {
+				if (!Treatment.ehNumero(ct) && ct.trim().length()>1)
+					resultado += ct;
+			}
 
-		if (removerStopwords) {
-			resultado = GlobalVariables.stoplist.removerStopwordDoInicio(resultado); // verifica se inicia (1º palavra) com stopword e, caso afirmativo, remove-a
-			resultado = GlobalVariables.stoplist.removerStopwordDoFinal(resultado); // verifica o termo termina com stopword (ultima palavra) e, caso afirmativo, remove-a
+			if (removerStopwords) {
+				resultado = GlobalVariables.stoplist.removerStopwordDoInicio(resultado); // verifica se inicia (1º palavra) com stopword e, caso afirmativo, remove-a
+				resultado = GlobalVariables.stoplist.removerStopwordDoFinal(resultado); // verifica o termo termina com stopword (ultima palavra) e, caso afirmativo, remove-a
 
-			if (GlobalVariables.stoplist.isStopword(resultado))
+				if (GlobalVariables.stoplist.isStopword(resultado))
+					resultado = "";
+			}
+			if (temCaracterEstranho(resultado))
 				resultado = "";
-		}
-		if (temCaracterEstranho(resultado))
-			resultado = "";
-
+	//	}
 		return resultado;	
 	}
 
@@ -562,11 +563,11 @@ public class Treatment {
 
 			// gravar o arquivo de log que contem <palavraLimpa>: <lista de palavras originais>
 			if (modificouString) {
-				
+
 				String strAux = new_str.toString().trim();
 				gravarHashLog(strAux, palavraOriginal);
 			}
-			
+
 			modificouString = false;
 			new_line += " " + new_str;
 			new_str = new StringBuffer("");
@@ -576,14 +577,14 @@ public class Treatment {
 
 	}
 
-/**
- * Esse metodo grava o hash de log que contem <palavraLimpa>: <lista de palavras originais>
- * @param strAux
- * @param palavraOriginal
- */
+	/**
+	 * Esse metodo grava o hash de log que contem <palavraLimpa>: <lista de palavras originais>
+	 * @param strAux
+	 * @param palavraOriginal
+	 */
 	private static void gravarHashLog(String strAux, String palavraOriginal) {
 		HashMap<String, Boolean> hashLog_palOrig = new HashMap<String, Boolean>();
-		
+
 		if (hashLog.containsKey(strAux)) {
 			hashLog_palOrig = hashLog.get(strAux);
 			if (!hashLog_palOrig.containsKey(palavraOriginal)) {
@@ -596,7 +597,7 @@ public class Treatment {
 				hashLog_palOrig.put(palavraOriginal, true);
 			hashLog.put(strAux, hashLog_palOrig);
 		}
-		
+
 	}
 
 	/** Recebe um conjunto de strings separadas por espco e retorna uma String apenas com caracteres permitidos.
@@ -706,7 +707,7 @@ public class Treatment {
 
 	public static boolean gravarArquivoGeralApend(File arqSaida, String data, String encoding) {
 		try {
-			
+
 			String path = arqSaida.getParent();
 			Treatment.criarDiretorio(path);
 			Treatment.criarArquivo(arqSaida);
@@ -720,7 +721,7 @@ public class Treatment {
 			fout.write(data);
 			fout.newLine();
 			fout.close();
-	            
+
 			/*			out.print(data);
 
 			out.flush();

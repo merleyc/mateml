@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import br.usp.mateml.main.GlobalVariables;
 import br.usp.mateml.steps.feature_extraction.ATF;
 import br.usp.mateml.steps.feature_extraction.Control;
 import br.usp.mateml.steps.feature_extraction.CorporaData;
@@ -161,7 +160,7 @@ public class Candidates {
 						node.tamCorpus = tamCorpus;
 						node.df = DF;
 
-						GlobalVariables.candidates.hash_ct1gram.put(string, node);
+						hash_ct1gram.put(string, node);
 					}
 				}
 				line = in.readLine();

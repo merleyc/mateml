@@ -8,9 +8,10 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import weka.core.Stopwords;
+import br.usp.mateml.loaders.StoplistLoader;
 import br.usp.mateml.loaders.ConfigurationLoader;
 import br.usp.mateml.loaders.PretextLoader;
+import br.usp.mateml.main.GlobalVariables;
 import br.usp.mateml.steps.preprocessing.Treatment;
 
 public class Phrases {
@@ -150,7 +151,7 @@ public class Phrases {
 				String sintagma = getString(node, new HashMap<String, Boolean>());
 				//"codigo=" + node.cod
 
-				if (!Stopwords.isStopword(sintagma)) { // verifica se termo eh stopword
+				if (!GlobalVariables.stoplist.isStopword(sintagma)) { // verifica se termo eh stopword
 
 					sintagma = Treatment.tratar_termo(sintagma, true);
 					if (!sintagma.equals(""))
@@ -279,7 +280,7 @@ public class Phrases {
 	}
 
 	private void armazenar_nucleo_np(String nucleo_sintagma) {
-		if (!Stopwords.isStopword(nucleo_sintagma)) { // verifica se termo � stopword
+		if (!GlobalVariables.stoplist.isStopword(nucleo_sintagma)) { // term is a stopword?
 
 			nucleo_sintagma = Treatment.tratar_termo(nucleo_sintagma, true);
 			if (!nucleo_sintagma.equals(""))

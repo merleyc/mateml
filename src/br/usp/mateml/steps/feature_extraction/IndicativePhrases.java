@@ -20,7 +20,7 @@ public class IndicativePhrases {
 	public HashMap<String, Boolean> obterExprIndicativas(
 			ConfigurationLoader configuration, PretextLoader pretextLoader) {
 
-		String caminhoCorpus = configuration.getCaminhoExpressoesIndicativas();
+		String caminhoCorpus = configuration.getCaminhoCorpus();
 		String caminhoArqExpIndicativas = configuration.getCaminhoExpressoesIndicativas();
 		String caminhoPretextStem = configuration.getCaminhoPretextStem();
 		

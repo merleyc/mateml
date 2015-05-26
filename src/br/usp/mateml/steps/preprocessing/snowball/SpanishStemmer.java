@@ -1,16 +1,16 @@
 // This file was generated automatically by the Snowball to Java compiler
 
 package br.usp.mateml.steps.preprocessing.snowball;
+import br.usp.mateml.steps.preprocessing.Treatment;
+import br.usp.mateml.util.TestDetector;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
-
-import br.usp.mateml.steps.preprocessing.Treatment;
-import br.usp.mateml.util.TestDetector;
 
 //import org.tartarus.snowball.Among;
 
@@ -21,9 +21,9 @@ import br.usp.mateml.util.TestDetector;
 
 public class SpanishStemmer extends SnowballStemmer {
 
-	private final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-	private final SpanishStemmer methodObject = new SpanishStemmer ();
+	private final static SpanishStemmer methodObject = new SpanishStemmer ();
 
 
 	/**
@@ -32,7 +32,7 @@ public class SpanishStemmer extends SnowballStemmer {
 	 * @return hash com o stem como chave e sua frequencia absoluta como valor.
 	 * @throws Throwable
 	 */
-	private HashMap<String, Integer> stemmizarCorpusToHash(String dirArq) throws Throwable {
+	private static HashMap<String, Integer> stemmizarCorpusToHash(String dirArq) throws Throwable {
 
 		HashMap<String, Integer> hashStemFreq = new HashMap<String, Integer>();
 
@@ -62,7 +62,7 @@ public class SpanishStemmer extends SnowballStemmer {
 					if (encoding != null) 
 						reader = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo),encoding));
 					else reader = new BufferedReader(new FileReader(arquivo));
-
+					
 
 					StringBuffer input = new StringBuffer();
 					int character;
@@ -99,7 +99,7 @@ public class SpanishStemmer extends SnowballStemmer {
 	}
 
 
-	private final Among a_0[] = {
+	private final static Among a_0[] = {
 		new Among ( "", -1, 6, "", methodObject ),
 		new Among ( "\u00E1", 0, 1, "", methodObject ),
 		new Among ( "\u00E9", 0, 2, "", methodObject ),
@@ -108,7 +108,7 @@ public class SpanishStemmer extends SnowballStemmer {
 		new Among ( "\u00FA", 0, 5, "", methodObject )
 	};
 
-	private final Among a_1[] = {
+	private final static Among a_1[] = {
 		new Among ( "la", -1, -1, "", methodObject ),
 		new Among ( "sela", 0, -1, "", methodObject ),
 		new Among ( "le", -1, -1, "", methodObject ),
@@ -124,7 +124,7 @@ public class SpanishStemmer extends SnowballStemmer {
 		new Among ( "nos", -1, -1, "", methodObject )
 	};
 
-	private final Among a_2[] = {
+	private final static Among a_2[] = {
 		new Among ( "ando", -1, 6, "", methodObject ),
 		new Among ( "iendo", -1, 6, "", methodObject ),
 		new Among ( "yendo", -1, 7, "", methodObject ),
@@ -138,26 +138,26 @@ public class SpanishStemmer extends SnowballStemmer {
 		new Among ( "\u00EDr", -1, 5, "", methodObject )
 	};
 
-	private final Among a_3[] = {
+	private final static Among a_3[] = {
 		new Among ( "ic", -1, -1, "", methodObject ),
 		new Among ( "ad", -1, -1, "", methodObject ),
 		new Among ( "os", -1, -1, "", methodObject ),
 		new Among ( "iv", -1, 1, "", methodObject )
 	};
 
-	private final Among a_4[] = {
+	private final static Among a_4[] = {
 		new Among ( "able", -1, 1, "", methodObject ),
 		new Among ( "ible", -1, 1, "", methodObject ),
 		new Among ( "ante", -1, 1, "", methodObject )
 	};
 
-	private final Among a_5[] = {
+	private final static Among a_5[] = {
 		new Among ( "ic", -1, 1, "", methodObject ),
 		new Among ( "abil", -1, 1, "", methodObject ),
 		new Among ( "iv", -1, 1, "", methodObject )
 	};
 
-	private final Among a_6[] = {
+	private final static Among a_6[] = {
 		new Among ( "ica", -1, 1, "", methodObject ),
 		new Among ( "ancia", -1, 2, "", methodObject ),
 		new Among ( "encia", -1, 5, "", methodObject ),
@@ -206,7 +206,7 @@ public class SpanishStemmer extends SnowballStemmer {
 		new Among ( "ivos", -1, 9, "", methodObject )
 	};
 
-	private final Among a_7[] = {
+	private final static Among a_7[] = {
 		new Among ( "ya", -1, 1, "", methodObject ),
 		new Among ( "ye", -1, 1, "", methodObject ),
 		new Among ( "yan", -1, 1, "", methodObject ),
@@ -221,7 +221,7 @@ public class SpanishStemmer extends SnowballStemmer {
 		new Among ( "y\u00F3", -1, 1, "", methodObject )
 	};
 
-	private final Among a_8[] = {
+	private final static Among a_8[] = {
 		new Among ( "aba", -1, 2, "", methodObject ),
 		new Among ( "ada", -1, 2, "", methodObject ),
 		new Among ( "ida", -1, 2, "", methodObject ),
@@ -320,7 +320,7 @@ public class SpanishStemmer extends SnowballStemmer {
 		new Among ( "i\u00F3", -1, 2, "", methodObject )
 	};
 
-	private final Among a_9[] = {
+	private final static Among a_9[] = {
 		new Among ( "a", -1, 1, "", methodObject ),
 		new Among ( "e", -1, 2, "", methodObject ),
 		new Among ( "o", -1, 1, "", methodObject ),
@@ -331,7 +331,7 @@ public class SpanishStemmer extends SnowballStemmer {
 		new Among ( "\u00F3", -1, 1, "", methodObject )
 	};
 
-	private final char g_v[] = {17, 65, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 4, 10 };
+	private static final char g_v[] = {17, 65, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 4, 10 };
 
 	private int I_p2;
 	private int I_p1;
@@ -848,7 +848,7 @@ public class SpanishStemmer extends SnowballStemmer {
 					break lab1;
 				case 1:
 					// (, line 126
-					// [, line 126
+							// [, line 126
 					ket = cursor;
 					// literal, line 126
 					if (!(eq_s_b(2, "at")))
@@ -900,7 +900,7 @@ public class SpanishStemmer extends SnowballStemmer {
 					break lab2;
 				case 1:
 					// (, line 140
-					// call R2, line 140
+							// call R2, line 140
 					if (!r_R2())
 					{
 						cursor = limit - v_3;
@@ -942,7 +942,7 @@ public class SpanishStemmer extends SnowballStemmer {
 					break lab3;
 				case 1:
 					// (, line 152
-					// call R2, line 152
+							// call R2, line 152
 					if (!r_R2())
 					{
 						cursor = limit - v_4;
@@ -1025,7 +1025,7 @@ public class SpanishStemmer extends SnowballStemmer {
 			return false;
 		case 1:
 			// (, line 171
-			// literal, line 171
+					// literal, line 171
 			if (!(eq_s_b(1, "u")))
 			{
 				return false;
@@ -1073,7 +1073,7 @@ public class SpanishStemmer extends SnowballStemmer {
 			return false;
 		case 1:
 			// (, line 179
-			// try, line 179
+					// try, line 179
 			v_3 = limit - cursor;
 			lab0: do {
 				// (, line 179
@@ -1283,14 +1283,14 @@ public class SpanishStemmer extends SnowballStemmer {
 	 * @return retorna o stem da string.
 	 * @throws Throwable
 	 */
-	public String stemmizarPalavraES(String st) {
+	public static String stemmizarPalavraES(String st) throws Throwable {
 
 		if (st.equals(""))
 			return "";
 
 		String stem = "";
 
-		//	Class stemClass = Class.forName("SpanishStemmer"); 
+	//	Class stemClass = Class.forName("SpanishStemmer"); 
 		SnowballStemmer stemmer = (SnowballStemmer) new SpanishStemmer();//stemClass.newInstance();
 
 		st = Treatment.tratar_termo(st, true);

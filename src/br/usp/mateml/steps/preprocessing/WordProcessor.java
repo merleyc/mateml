@@ -252,7 +252,7 @@ public class WordProcessor {
 
 	public ArrayList<AtrFreq> processarPalavrasEN_PT_ES(File arq, String lang,
 			boolean remStopWords, boolean radicalizar, HashMap<String,String> stemPal,
-			ArrayList<String> names, HashMap<String,Integer> atrDF, SpanishStemmer spanishStemmer){
+			ArrayList<String> names, HashMap<String,Integer> atrDF){
 
 		ArrayList<AtrFreq> atributos = new ArrayList<AtrFreq>();
 
@@ -290,119 +290,221 @@ public class WordProcessor {
 				//arqTexto.close();
 				in.close();
 			}
-		}catch(Exception e){
-			System.out.println("Ocorreu um erro ao ler o arquivo " + arq.getAbsolutePath() + ".");
-		}
 
-		numDocs++;
-		// OS RESULTADOS DOS STEM FICAM MELHORES SEM REMOVER ACENTOS DAS PALAVRAS!!!
-		String textoLimpo = Treatment.clean(txt.toString().toLowerCase()); //Limpeza do arquivo texto
 
-		if(remStopWords==true){
-			textoLimpo = GlobalVariables.stoplist.removeStopWords(textoLimpo); //Remocao de StopWords do arquivo texto
-		}
+			numDocs++;
+			// OS RESULTADOS DOS STEM FICAM MELHORES SEM REMOVER ACENTOS DAS PALAVRAS!!!
+			String textoLimpo = Treatment.clean(txt.toString().toLowerCase()); //Limpeza do arquivo texto
 
-		ArrayList<String> palavras = new ArrayList<String>();
-		HashMap<String, Integer> hashAtrFreq = new HashMap<String, Integer>();
+			if(remStopWords==true){
+				textoLimpo = GlobalVariables.stoplist.removeStopWords(textoLimpo); //Remocao de StopWords do arquivo texto
+			}
 
-		String[] todas_palavras = textoLimpo.split(" "); //Armazena as palavras do texto em um vetor\
-		if(radicalizar == true){
-			if(lang.equals("port")){ //Radicalizando as palavras dos documentos
-				for(int i = 0;i<todas_palavras.length;i++){
-					String chave = todas_palavras[i];
+			ArrayList<String> palavras = new ArrayList<String>();
+			HashMap<String, Integer> hashAtrFreq = new HashMap<String, Integer>();
 
-					String stem;
-					if(stemPal.containsKey(chave)){
-						stem = stemPal.get(chave);
-					}else{
-						stem = new String(stemPt.wordStemming(chave));
-						stemPal.put(chave, stem);
-					}
-					if(hashAtrFreq.containsKey(stem)){
-						Integer freq = hashAtrFreq.get(stem);
-						hashAtrFreq.put(stem, freq + 1);
-					}else{
-						if(stem.length()>1){
-							hashAtrFreq.put(stem, 1);
-							if(!names.contains(stem)){
-								names.add(stem);
-							}
-							if(!palavras.contains(stem)){
-								palavras.add(stem);
-								if(atrDF.containsKey(stem)){
-									int valor = atrDF.get(stem);
-									valor++;
-									atrDF.put(stem, valor);
-								}else{
-									atrDF.put(stem, 1);
+			String[] todas_palavras = textoLimpo.split(" "); //Armazena as palavras do texto em um vetor\
+			if(radicalizar == true){
+				if(lang.equals("port")){ //Radicalizando as palavras dos documentos
+					for(int i = 0;i<todas_palavras.length;i++){
+						String chave = todas_palavras[i];
+
+						String stem;
+						if(stemPal.containsKey(chave)){
+							stem = stemPal.get(chave);
+						}else{
+							stem = new String(stemPt.wordStemming(chave));
+							stemPal.put(chave, stem);
+						}
+						if(hashAtrFreq.containsKey(stem)){
+							Integer freq = hashAtrFreq.get(stem);
+							hashAtrFreq.put(stem, freq + 1);
+						}else{
+							if(stem.length()>1){
+								hashAtrFreq.put(stem, 1);
+								if(!names.contains(stem)){
+									names.add(stem);
+								}
+								if(!palavras.contains(stem)){
+									palavras.add(stem);
+									if(atrDF.containsKey(stem)){
+										int valor = atrDF.get(stem);
+										valor++;
+										atrDF.put(stem, valor);
+									}else{
+										atrDF.put(stem, 1);
+									}
 								}
 							}
 						}
-					}
 
-					/*    Modelo do arquivo 'stemWdST.all' :
+						/*    Modelo do arquivo 'stemWdST.all' :
 					abat : 4(2/390)
 			        	abate:2
 			        	abatidas:2*/
-					// gravar dados para o arquivo stemWdST.all
-					HashMap<String, Integer> hashChaveFreq_atual = null;
-					if (hashStemWdST.containsKey(stem))
-						hashChaveFreq_atual = hashStemWdST.get(stem);
-					else
-						hashChaveFreq_atual = new HashMap<String, Integer>();
-					// obtendo a frequencia da chave (palavra original) no corpus:
-					int freqChave = 1;
-					if (hashChaveFreq.containsKey(chave)){
-						freqChave = hashChaveFreq.get(chave);
-						freqChave += 1;
-					}
-					hashChaveFreq.put(chave, freqChave);
-					hashChaveFreq_atual.put(chave, freqChave);
-					hashStemWdST.put(stem, hashChaveFreq_atual);
-					/*	  Gravar o texto stemmizado (arquivo Maid da PreTexT): */
-					textoAtual = textoAtual + " " + stem;
+						// gravar dados para o arquivo stemWdST.all
+						HashMap<String, Integer> hashChaveFreq_atual = null;
+						if (hashStemWdST.containsKey(stem))
+							hashChaveFreq_atual = hashStemWdST.get(stem);
+						else
+							hashChaveFreq_atual = new HashMap<String, Integer>();
+						// obtendo a frequencia da chave (palavra original) no corpus:
+						int freqChave = 1;
+						if (hashChaveFreq.containsKey(chave)){
+							freqChave = hashChaveFreq.get(chave);
+							freqChave += 1;
+						}
+						hashChaveFreq.put(chave, freqChave);
+						hashChaveFreq_atual.put(chave, freqChave);
+						hashStemWdST.put(stem, hashChaveFreq_atual);
+						/*	  Gravar o texto stemmizado (arquivo Maid da PreTexT): */
+						textoAtual = textoAtual + " " + stem;
 
+					}
+
+				}else if(lang.equals("ingl")) {
+					for(int i = 0;i<todas_palavras.length;i++){
+						String chave = todas_palavras[i];
+						chave = chave.trim();
+						String stem;
+						if(stemPal.containsKey(chave)){
+							stem = stemPal.get(chave);
+						}else{
+							stem = new String(StemmerEn.get(chave));
+							stemPal.put(chave, stem);
+						}
+
+						if(hashAtrFreq.containsKey(stem)){
+							Integer freq = hashAtrFreq.get(stem);
+							hashAtrFreq.put(stem, freq + 1);
+						}else{
+							if(stem.length()>1){
+								hashAtrFreq.put(stem, 1);
+								if(!names.contains(stem)){
+									names.add(stem);
+								}
+								if(!palavras.contains(stem)){
+									palavras.add(stem);
+									if(atrDF.containsKey(stem)){
+										int valor = atrDF.get(stem);
+										valor++;
+										atrDF.put(stem, valor);
+									}else{
+										atrDF.put(stem, 1);
+									}
+								}
+							}
+
+						}
+
+						// gravar dados para o arquivo stemWdST.all
+						HashMap<String, Integer> hashChaveFreq_atual = null;
+						if (hashStemWdST.containsKey(stem))
+							hashChaveFreq_atual = hashStemWdST.get(stem);
+						else
+							hashChaveFreq_atual = new HashMap<String, Integer>();
+						int freqChave = 1;
+						if(hashChaveFreq.containsKey(chave)){
+							freqChave = hashChaveFreq.get(chave);
+							freqChave += 1;
+						}
+						hashChaveFreq.put(chave, freqChave);
+						hashChaveFreq_atual.put(chave, freqChave);
+						hashStemWdST.put(stem, hashChaveFreq_atual);
+						/*	  Gravar o texto stemmizado (arquivo Maid da PreTexT): */
+						textoAtual = textoAtual + " " + stem;
+
+					}
+				} else if(lang.equals("esp")) {
+					for(int i = 0;i<todas_palavras.length;i++){
+						String chave = todas_palavras[i];
+						chave = chave.trim();
+						String stem;
+						if(stemPal.containsKey(chave)){
+							stem = stemPal.get(chave);
+						}else{
+							stem = SpanishStemmer.stemmizarPalavraES(chave);
+							stemPal.put(chave, stem);
+						}
+
+						if(hashAtrFreq.containsKey(stem)){
+							Integer freq = hashAtrFreq.get(stem);
+							hashAtrFreq.put(stem, freq + 1);
+						}else{
+							if(stem.length()>1){
+								hashAtrFreq.put(stem, 1);
+								if(!names.contains(stem)){
+									names.add(stem);
+								}
+								if(!palavras.contains(stem)){
+									palavras.add(stem);
+									if(atrDF.containsKey(stem)){
+										int valor = atrDF.get(stem);
+										valor++;
+										atrDF.put(stem, valor);
+									}else{
+										atrDF.put(stem, 1);
+									}
+								}
+							}
+
+						}
+
+						// gravar dados para o arquivo stemWdST.all
+						HashMap<String, Integer> hashChaveFreq_atual = null;
+						if (hashStemWdST.containsKey(stem))
+							hashChaveFreq_atual = hashStemWdST.get(stem);
+						else
+							hashChaveFreq_atual = new HashMap<String, Integer>();
+						int freqChave = 1;
+						if(hashChaveFreq.containsKey(chave)){
+							freqChave = hashChaveFreq.get(chave);
+							freqChave += 1;
+						}
+						hashChaveFreq.put(chave, freqChave);
+						hashChaveFreq_atual.put(chave, freqChave);
+						hashStemWdST.put(stem, hashChaveFreq_atual);
+						/*	  Gravar o texto stemmizado (arquivo Maid da PreTexT): */
+						textoAtual = textoAtual + " " + stem;
+
+					}
 				}
 
-			}else if(lang.equals("ingl")) {
+			}
+
+			else{ // se nao for radicalizar
 				for(int i = 0;i<todas_palavras.length;i++){
 					String chave = todas_palavras[i];
 					chave = chave.trim();
-					String stem;
-					if(stemPal.containsKey(chave)){
-						stem = stemPal.get(chave);
-					}else{
-						stem = new String(StemmerEn.get(chave));
-						stemPal.put(chave, stem);
+					if(!stemPal.containsKey(chave)){
+						stemPal.put(chave, chave);
 					}
-
-					if(hashAtrFreq.containsKey(stem)){
-						Integer freq = hashAtrFreq.get(stem);
-						hashAtrFreq.put(stem, freq + 1);
+					if(hashAtrFreq.containsKey(chave)){
+						Integer freq = hashAtrFreq.get(chave);
+						hashAtrFreq.put(chave, freq + 1);
 					}else{
-						if(stem.length()>1){
-							hashAtrFreq.put(stem, 1);
-							if(!names.contains(stem)){
-								names.add(stem);
+						if(chave.length()>1){
+							hashAtrFreq.put(chave, 1);
+							if(!names.contains(chave)){
+								names.add(chave);
 							}
-							if(!palavras.contains(stem)){
-								palavras.add(stem);
-								if(atrDF.containsKey(stem)){
-									int valor = atrDF.get(stem);
+							if(!palavras.contains(chave)){
+								palavras.add(chave);
+								if(atrDF.containsKey(chave)){
+									int valor = atrDF.get(chave);
 									valor++;
-									atrDF.put(stem, valor);
+									atrDF.put(chave, valor);
 								}else{
-									atrDF.put(stem, 1);
+									atrDF.put(chave, 1);
 								}
 							}
 						}
-
 					}
 
 					// gravar dados para o arquivo stemWdST.all
 					HashMap<String, Integer> hashChaveFreq_atual = null;
-					if (hashStemWdST.containsKey(stem))
-						hashChaveFreq_atual = hashStemWdST.get(stem);
+					if (hashStemWdST.containsKey(chave))
+						hashChaveFreq_atual = hashStemWdST.get(chave);
 					else
 						hashChaveFreq_atual = new HashMap<String, Integer>();
 					int freqChave = 1;
@@ -412,130 +514,32 @@ public class WordProcessor {
 					}
 					hashChaveFreq.put(chave, freqChave);
 					hashChaveFreq_atual.put(chave, freqChave);
-					hashStemWdST.put(stem, hashChaveFreq_atual);
+					hashStemWdST.put(chave, hashChaveFreq_atual);
 					/*	  Gravar o texto stemmizado (arquivo Maid da PreTexT): */
-					textoAtual = textoAtual + " " + stem;
+					textoAtual = textoAtual + " " + chave;
 
 				}
-			} else if(lang.equals("esp")) {
-				for(int i = 0;i<todas_palavras.length;i++){
-					String chave = todas_palavras[i];
-					chave = chave.trim();
-					String stem;
-					if(stemPal.containsKey(chave)){
-						stem = stemPal.get(chave);
-					}else{
-						stem = new String(spanishStemmer.stemmizarPalavraES(chave));
-						stemPal.put(chave, stem);
-					}
+			} //fim do nao radicalizar
 
-					if(hashAtrFreq.containsKey(stem)){
-						Integer freq = hashAtrFreq.get(stem);
-						hashAtrFreq.put(stem, freq + 1);
-					}else{
-						if(stem.length()>1){
-							hashAtrFreq.put(stem, 1);
-							if(!names.contains(stem)){
-								names.add(stem);
-							}
-							if(!palavras.contains(stem)){
-								palavras.add(stem);
-								if(atrDF.containsKey(stem)){
-									int valor = atrDF.get(stem);
-									valor++;
-									atrDF.put(stem, valor);
-								}else{
-									atrDF.put(stem, 1);
-								}
-							}
-						}
-
-					}
-
-					// gravar dados para o arquivo stemWdST.all
-					HashMap<String, Integer> hashChaveFreq_atual = null;
-					if (hashStemWdST.containsKey(stem))
-						hashChaveFreq_atual = hashStemWdST.get(stem);
-					else
-						hashChaveFreq_atual = new HashMap<String, Integer>();
-					int freqChave = 1;
-					if(hashChaveFreq.containsKey(chave)){
-						freqChave = hashChaveFreq.get(chave);
-						freqChave += 1;
-					}
-					hashChaveFreq.put(chave, freqChave);
-					hashChaveFreq_atual.put(chave, freqChave);
-					hashStemWdST.put(stem, hashChaveFreq_atual);
-					/*	  Gravar o texto stemmizado (arquivo Maid da PreTexT): */
-					textoAtual = textoAtual + " " + stem;
-
-				}
+			Set<String> listaAtr =  hashAtrFreq.keySet();
+			Object[] listaAtributos = listaAtr.toArray();
+			for(int i=0;i<listaAtributos.length;i++){
+				String chave = listaAtributos[i].toString();
+				atributos.add(new AtrFreq(chave,hashAtrFreq.get(chave)));
 			}
 
+			hashStemFreq = atrDF;
+			Treatment.gravarArquivo2(arq, textoAtual);
+
+		}catch(Exception e){
+			System.out.println("Ocorreu um erro ao ler o arquivo " + arq.getAbsolutePath() + ".");
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		else{ // se nao for radicalizar
-			for(int i = 0;i<todas_palavras.length;i++){
-				String chave = todas_palavras[i];
-				chave = chave.trim();
-				if(!stemPal.containsKey(chave)){
-					stemPal.put(chave, chave);
-				}
-				if(hashAtrFreq.containsKey(chave)){
-					Integer freq = hashAtrFreq.get(chave);
-					hashAtrFreq.put(chave, freq + 1);
-				}else{
-					if(chave.length()>1){
-						hashAtrFreq.put(chave, 1);
-						if(!names.contains(chave)){
-							names.add(chave);
-						}
-						if(!palavras.contains(chave)){
-							palavras.add(chave);
-							if(atrDF.containsKey(chave)){
-								int valor = atrDF.get(chave);
-								valor++;
-								atrDF.put(chave, valor);
-							}else{
-								atrDF.put(chave, 1);
-							}
-						}
-					}
-				}
-
-				// gravar dados para o arquivo stemWdST.all
-				HashMap<String, Integer> hashChaveFreq_atual = null;
-				if (hashStemWdST.containsKey(chave))
-					hashChaveFreq_atual = hashStemWdST.get(chave);
-				else
-					hashChaveFreq_atual = new HashMap<String, Integer>();
-				int freqChave = 1;
-				if(hashChaveFreq.containsKey(chave)){
-					freqChave = hashChaveFreq.get(chave);
-					freqChave += 1;
-				}
-				hashChaveFreq.put(chave, freqChave);
-				hashChaveFreq_atual.put(chave, freqChave);
-				hashStemWdST.put(chave, hashChaveFreq_atual);
-				/*	  Gravar o texto stemmizado (arquivo Maid da PreTexT): */
-				textoAtual = textoAtual + " " + chave;
-
-			}
-		} //fim do nao radicalizar
-
-		Set<String> listaAtr =  hashAtrFreq.keySet();
-		Object[] listaAtributos = listaAtr.toArray();
-		for(int i=0;i<listaAtributos.length;i++){
-			String chave = listaAtributos[i].toString();
-			atributos.add(new AtrFreq(chave,hashAtrFreq.get(chave)));
-		}
-
-		hashStemFreq = atrDF;
-		Treatment.gravarArquivo2(arq, textoAtual);
 
 		return atributos;
 	}
-
 
 	public void processarPalavrasEN_PT_ES_BigData(File arqIn, File arqOut, String lang,
 			boolean remStopWords, boolean radicalizar, HashMap<String,String> stemPal,
@@ -582,7 +586,7 @@ public class WordProcessor {
 				//arqTexto.close();
 				in.close();
 			}
-		}catch(Exception e){
+		} catch(Exception e){
 			System.out.println("Ocorreu um erro ao ler o arquivo " + arqIn.getAbsolutePath() + ".");
 		}
 

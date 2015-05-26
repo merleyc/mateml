@@ -25,9 +25,9 @@ public class GlobalVariables {
 		}
 	}
 
-	public static void loadStoplist(String pathStoplistFile, String pathReferenceList) {
+	public static void loadStoplist(String pathStoplistFile) {
 		if (stoplist == null) {
-			stoplist = new StoplistLoader(pathStoplistFile, pathReferenceList);
+			stoplist = new StoplistLoader(pathStoplistFile, referenceList);
 		}
 	}
 	

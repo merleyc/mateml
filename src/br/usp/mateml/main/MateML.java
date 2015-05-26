@@ -48,8 +48,7 @@ public class MateML {
 		WordProcessor processadorDePalavras = new WordProcessor();
 		SpanishStemmer spanishStemmer = new SpanishStemmer();
 
-		GlobalVariables.loadStoplist(GlobalVariables.configuration.getCaminhoStoplist(),
-				GlobalVariables.configuration.getCaminhoListaReferencia());
+		GlobalVariables.loadStoplist(GlobalVariables.configuration.getCaminhoStoplist());
 
 		if (GlobalVariables.configuration.isCriarArqsPretext()) {
 			//StopWords sw = new StopWords(CarregadorConfiguracoes.language); //Objeto para remocao das stopwords dos documentos

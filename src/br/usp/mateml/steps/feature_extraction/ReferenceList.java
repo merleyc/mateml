@@ -78,7 +78,7 @@ public class ReferenceList {
 	}
 
 	public boolean containsKey(String line) {
-		if (hash_referenceList.containsKey(line)) {
+		if (hash_referenceList != null && line != null && hash_referenceList.containsKey(line)) {
 			return true;
 		}
 		return false;

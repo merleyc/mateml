@@ -36,7 +36,7 @@ public class ConfigurationLoader {
 	private String caminhoStoplistEsp= "";
 	private boolean usarDiretorioComoClasse = false; // utilizar diretorio da pasta de entrada como classe
 	private boolean FreqTrueBinarioFalse = false;
-	
+
 	// temporary files for each domain:
 	public final String arqDataSemClasse = "./data/discover_sem_classe.data";
 	public final String arqMatrizEsparsa = "./data/discoveresparsaAtribDoc1Gram.txt";
@@ -81,7 +81,6 @@ public class ConfigurationLoader {
 	 * Esse metodo le o arquivo de configuracao e obtem os caminhos dos arquivos de entrada.
 	 */
 	private void loadCfg (String parameters) throws IOException{
-		boolean statusParametros = false;
 		File file = getCfgFile(parameters);
 		BufferedReader in = null;
 
@@ -89,7 +88,7 @@ public class ConfigurationLoader {
 			if (file == null) {
 				throw new IllegalArgumentException("File not found.");
 			}
-			
+
 			in = new BufferedReader(new FileReader(file));
 
 			String line = in.readLine();
@@ -100,84 +99,80 @@ public class ConfigurationLoader {
 
 					if (st.hasMoreTokens()) {
 						String nomeParametro = st.nextToken().toLowerCase().trim();
+						String valorParametro = "";
 
 						if (st.hasMoreTokens()) { 
-							String valorParametro = st.nextToken().trim();
-							statusParametros = true;
+							valorParametro = st.nextToken().trim();
+						}
+						if (nomeParametro.equals("caminhocorpus"))
+							caminhoCorpus = valorParametro;
+						else if (nomeParametro.equals("caminhopretext1"))
+							caminhoPretext1 = valorParametro;
+						else if (nomeParametro.equals("caminhopretextdata"))
+							caminhoPretextData = valorParametro;
+						else if (nomeParametro.equals("caminhopretextname"))
+							caminhoPretextName = valorParametro;
+						else if (nomeParametro.equals("caminhopretextstem"))
+							caminhoPretextStem = valorParametro;
+						else if (nomeParametro.equals("caminhopretextmaid"))
+							caminhoPretextMaid = valorParametro;
+						else if (nomeParametro.equals("caminhostoplist"))
+							caminhoStoplist = valorParametro;
+						else if (nomeParametro.equals("caminhocorpusgeral"))
+							caminhoCorpusGeral = valorParametro;
+						else if (nomeParametro.equals("caminhoexpressoesindicativas"))
+							caminhoExpressoesIndicativas = valorParametro;
+						else if (nomeParametro.equals("janelancvalue"))
+							janelaNCvalue = Integer.parseInt(valorParametro);
+						else if (nomeParametro.equals("caminhoparserpalavras"))
+							caminhoParserPalavras = valorParametro;
+						else if (nomeParametro.equals("caminholistareferencia"))
+							caminhoListaReferencia = valorParametro;
+						else if (nomeParametro.equals("caminhoxmltaxonomia"))
+							caminhoXmlTaxonomia = valorParametro;
+						else if (nomeParametro.equals("caminhosaida"))
+							caminhoSaida = valorParametro;
 
 
-							if (nomeParametro.equals("caminhocorpus"))
-								caminhoCorpus = valorParametro;
-							else if (nomeParametro.equals("caminhopretext1"))
-								caminhoPretext1 = valorParametro;
-							else if (nomeParametro.equals("caminhopretextdata"))
-								caminhoPretextData = valorParametro;
-							else if (nomeParametro.equals("caminhopretextname"))
-								caminhoPretextName = valorParametro;
-							else if (nomeParametro.equals("caminhopretextstem"))
-								caminhoPretextStem = valorParametro;
-							else if (nomeParametro.equals("caminhopretextmaid"))
-								caminhoPretextMaid = valorParametro;
-							else if (nomeParametro.equals("caminhostoplist"))
-								caminhoStoplist = valorParametro;
-							else if (nomeParametro.equals("caminhocorpusgeral"))
-								caminhoCorpusGeral = valorParametro;
-							else if (nomeParametro.equals("caminhoexpressoesindicativas"))
-								caminhoExpressoesIndicativas = valorParametro;
-							else if (nomeParametro.equals("janelancvalue"))
-								janelaNCvalue = Integer.parseInt(valorParametro);
-							else if (nomeParametro.equals("caminhoparserpalavras"))
-								caminhoParserPalavras = valorParametro;
-							else if (nomeParametro.equals("caminholistareferencia"))
-								caminhoListaReferencia = valorParametro;
-							else if (nomeParametro.equals("caminhoxmltaxonomia"))
-								caminhoXmlTaxonomia = valorParametro;
-							else if (nomeParametro.equals("caminhosaida"))
-								caminhoSaida = valorParametro;
-
-
-							if (nomeParametro.equals("arquivospretext"))
+						if (nomeParametro.equals("arquivospretext"))
+							if (valorParametro.equals("true"))
+								criarArqsPretext = true;
+						if (criarArqsPretext) {
+							if (nomeParametro.equals("stemmer")) {
 								if (valorParametro.equals("true"))
-									criarArqsPretext = true;
-							if (criarArqsPretext) {
-								if (nomeParametro.equals("stemmer")) {
-									if (valorParametro.equals("true"))
-										stemmer = true;
-									else stemmer = false;
-								}
-								else if (nomeParametro.equals("language"))
-									language = valorParametro;
-								else if (nomeParametro.equals("stopword")) {
-									if (valorParametro.equals("true"))
-										stopword = true;
-									else stopword = false;
-								}
-								else if (nomeParametro.equals("caminhostoplistingl"))
-									caminhoStoplistIngl = valorParametro;
-								else if (nomeParametro.equals("caminhostoplistport"))
-									caminhoStoplistPort = valorParametro;
-								else if (nomeParametro.equals("caminhostoplistesp"))
-									caminhoStoplistEsp= valorParametro;
-								else if (nomeParametro.equals("usardiretoriocomoclasse")) {
-									if (valorParametro.equals("true"))
-										usarDiretorioComoClasse = true;
-									else usarDiretorioComoClasse = false;
-								}
-								else if (nomeParametro.equals("freqtruebinariofalse")) {
-									if (valorParametro.equals("true"))
-										FreqTrueBinarioFalse = true;
-									else FreqTrueBinarioFalse = false;
-								}
+									stemmer = true;
+								else stemmer = false;
+							}
+							else if (nomeParametro.equals("language"))
+								language = valorParametro;
+							else if (nomeParametro.equals("stopword")) {
+								if (valorParametro.equals("true"))
+									stopword = true;
+								else stopword = false;
+							}
+							else if (nomeParametro.equals("caminhostoplistingl"))
+								caminhoStoplistIngl = valorParametro;
+							else if (nomeParametro.equals("caminhostoplistport"))
+								caminhoStoplistPort = valorParametro;
+							else if (nomeParametro.equals("caminhostoplistesp"))
+								caminhoStoplistEsp= valorParametro;
+							else if (nomeParametro.equals("usardiretoriocomoclasse")) {
+								if (valorParametro.equals("true"))
+									usarDiretorioComoClasse = true;
+								else usarDiretorioComoClasse = false;
+							}
+							else if (nomeParametro.equals("freqtruebinariofalse")) {
+								if (valorParametro.equals("true"))
+									FreqTrueBinarioFalse = true;
+								else FreqTrueBinarioFalse = false;
 							}
 						}
-
 					}
 				}
 				line = in.readLine();
 			}
 
-			if (statusParametros)
-				statusParametros = validarParametros(criarArqsPretext);
+			boolean statusParametros = validarParametros(criarArqsPretext);
 			if (!statusParametros) {
 				throw new RuntimeException("Invalid file content: " + file);
 			}
@@ -223,10 +218,10 @@ public class ConfigurationLoader {
 			System.out.print("\nNao ha diretorio assignado para 'caminhoListaReferencia'.");
 			statusParametros = false;
 		}
-		if (caminhoXmlTaxonomia.isEmpty()) {
+		/*if (caminhoXmlTaxonomia.isEmpty()) {
 			System.out.print("\nNao ha diretorio assignado para 'caminhoXmlTaxonomia'.");
 			statusParametros = false;
-		}
+		}*/
 		if (caminhoSaida.isEmpty()) {
 			System.out.print("\nNao ha diretorio assignado para 'caminhoSaida'.");
 			statusParametros = false;

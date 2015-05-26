@@ -51,7 +51,7 @@ public class DataRepresentation {
 			if (filesIn.get(i).toString().endsWith(".txt")) {
 				atribs.atributos = processadorDePalavras.processarPalavrasEN_PT_ES(filesIn.get(i),
 						configuration.getLanguage(), configuration.isStopword(),
-						configuration.isStemmer(), stemPal, names, atrDF, spanishStemmer);
+						configuration.isStemmer(), stemPal, names, atrDF);
 				atributos.add(i, atribs);
 				numDocs++;
 				System.out.print(".");
