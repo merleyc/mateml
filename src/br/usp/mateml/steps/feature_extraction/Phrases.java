@@ -35,8 +35,8 @@ public class Phrases {
 
 		HashMap<String, Character> listaStemSintagmas = new HashMap<String, Character>(); // Character: 'n'=nucleo do sintagma e 's' sintagma completo.
 		String nomeArqTiger = "";
-		String caminhoParserPalavras = configuration.getCaminhoParserPalavras();
-		String caminhoPretextStem = configuration.getCaminhoPretextStem();
+		String caminhoParserPalavras = configuration.getPathParserPalavras();
+		String caminhoPretextStem = configuration.getPathPretextStem();
 		String language = configuration.getLanguage(); 
 		
 		String[] lista_arq = (new File(caminhoParserPalavras)).list();

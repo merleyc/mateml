@@ -24,7 +24,7 @@ public class Output {
 	 * @param pathOutput 
 	 */
 	public static void gerarMatriz(ConfigurationLoader configuration, Candidates candidates) {
-		createArff(configuration.getCaminhoSaida(), candidates);
+		createArff(configuration.getPathSaida(), candidates);
 	}
 
 	private static boolean createArff (String caminhoSaida, Candidates candidates){

@@ -32,7 +32,7 @@ public class NCvalue {
 			PretextLoader pretextLoader, Candidates candidates){
 
 		long inicial = new Date().getTime();
-		File diretorioParser = new File(configuration.getCaminhoParserPalavras());
+		File diretorioParser = new File(configuration.getPathParserPalavras());
 		if (diretorioParser.exists()) {
 		//if (Util.arquivoOK(caminhoParserPalavras)) {
 			armazenarPalavrasDoCorpus(configuration, janela, pretextLoader, candidates);
@@ -103,9 +103,9 @@ public class NCvalue {
 	private void armazenarPalavrasDoCorpus(ConfigurationLoader configuration, int janela,
 			PretextLoader pretextLoader, Candidates candidates) {
 		
-		String caminhoParserPalavras = configuration.getCaminhoParserPalavras();
-		String caminhoPretextStem = configuration.getCaminhoPretextStem();
-		String caminhoPretextMaid = configuration.getCaminhoPretextMaid();
+		String caminhoParserPalavras = configuration.getPathParserPalavras();
+		String caminhoPretextStem = configuration.getPathPretextStem();
+		String caminhoPretextMaid = configuration.getPathPretextMaid();
 		String arquivo = "";
 		//Vector<Pair> stemTipoTexto = new Vector<Pair>(); //são as palavras normalizadas do texto, mantendo-se sua ordem. 
 
@@ -147,8 +147,8 @@ public class NCvalue {
 			Vector<Pair> stemTipoTexto, ConfigurationLoader configuration,
 			String nomeArquivo, PretextLoader pretextLoader) {
 
-		String caminhoParserPalavras = configuration.getCaminhoParserPalavras();
-		String caminhoPretextStem = configuration.getCaminhoPretextStem();
+		String caminhoParserPalavras = configuration.getPathParserPalavras();
+		String caminhoPretextStem = configuration.getPathPretextStem();
 		String language = configuration.getLanguage();
 		
 		HashMap<String, String> palavraTipo = buscarTipoDaPalavraNoParser(caminhoParserPalavras, language, nomeArquivo); //<palavra, tipo>

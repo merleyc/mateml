@@ -53,35 +53,35 @@ public class Features {
 				hashTFIDF = null;		
 
 				// Obtendo dados para calcular o TV, TVQ, TC.
-				String arqPretextData = configuration.getCaminhoPretextData();
+				String arqPretextData = configuration.getPathPretextData();
 
 				if (!Util.arquivoOK(arqPretextData))
 					System.out.println("Nao foi possivel calcular as caracteristicas TV, TVQ e TC.");
 				else {
 					DiscoverClass retiraClasseDiscover = new DiscoverClass(
-							arqPretextData, configuration.arqDataSemClasse);
+							arqPretextData, configuration.tmp_fileDataWithoutClass);
 					SparseMatrix matrizEsparsaAtribDoc = new SparseMatrix(
-							configuration.arqDataSemClasse, configuration.arqMatrizEsparsa);
+							configuration.tmp_fileDataWithoutClass, configuration.tmp_fileSparseMatrix);
 					
 					if (matrizEsparsaAtribDoc != null)
 						System.out.println("Matriz esparsa criada.");
 					Vector<String> NamesCts = pretextLoader.obterTermoDaMatrizName(
-							configuration.getCaminhoPretextName());
+							configuration.getPathPretextName());
 					if (NamesCts != null)
 						System.out.println("Matriz Names armazenada.");
 
 					// Calcular TV:
-					HashMap<String, Double> hashTv = tv.calculaTV(configuration.arqMatrizEsparsa, NamesCts);
+					HashMap<String, Double> hashTv = tv.calculaTV(configuration.tmp_fileSparseMatrix, NamesCts);
 					candidates.atualizar_hashTv(hashTv, candidates);
 					hashTv = null;
 
 					// Calcular TVQ:
-					HashMap<String, Double> hashTvq = tvq.calculaTVQ(configuration.arqMatrizEsparsa, NamesCts);
+					HashMap<String, Double> hashTvq = tvq.calculaTVQ(configuration.tmp_fileSparseMatrix, NamesCts);
 					candidates.atualizar_hashTvq(hashTvq, candidates);
 					hashTvq = null;
 
 					// Calcular TC:
-					HashMap<String, Double> hashTc = tc.calculaTC(configuration.arqMatrizEsparsa, NamesCts, configuration.arqTfidf);
+					HashMap<String, Double> hashTc = tc.calculaTC(configuration.tmp_fileSparseMatrix, NamesCts, configuration.tmp_fileTfidf);
 					candidates.atualizar_hashTc(hashTc, candidates);
 					hashTc = null;
 
@@ -90,7 +90,7 @@ public class Features {
 
 				// Obter frequencia a partir do Corpus de Lingua Geral:
 				HashMap<String, NodeCandidate> hashCG = corpusLinguaGeral.carregarHash_corpusGeral(
-						configuration.getCaminhoCorpusGeral());
+						configuration.getPathCorpusGeral());
 				candidates.atualizar_hashCG(hashCG, candidates);
 
 				// Obter o valor da medida Weirdness:
@@ -116,7 +116,7 @@ public class Features {
 
 				// Calcular C-Value:
 				HashMap<String, Double> hashCvalue = cvalue.calcularCvalue(
-						configuration.getCaminhoPretextStem(), candidates, pretextLoader);
+						configuration.getPathPretextStem(), candidates, pretextLoader);
 				candidates.atualizar_hashCvalue(hashCvalue, candidates);
 				hashCvalue = null;
 
@@ -155,7 +155,7 @@ public class Features {
 				Output.gerarMatriz(GlobalVariables.configuration, GlobalVariables.candidates);
 
 				// Obter caracteristicas identificadas na taxonomia do mesmo dominio do corpus:
-				String arqXmlTax = configuration.getCaminhoXmlTaxonomia();
+				String arqXmlTax = configuration.getPathXmlTaxonomia();
 				if (arqXmlTax.equals("") || arqXmlTax == null || arqXmlTax.length() < 0) {
 					System.out.println("Nao ha arquivo XML da taxonomia do dominio: " + arqXmlTax +
 							".\nNao foi possivel calcular as caracteristicas usando a taxonomia.");
@@ -171,7 +171,7 @@ public class Features {
 
 				// Encontrar cts que estao presentes na lista de referencia:
 				if (referenceList.isReferenceListEmpty())
-					referenceList = new ReferenceList(configuration.getCaminhoListaReferencia()); // armazena palavras da lista de refer�ncia
+					referenceList = new ReferenceList(configuration.getPathListaReferencia()); // armazena palavras da lista de refer�ncia
 				//candidates.atualizar_hashLR(referenceList, candidates);
 
 			} catch (IOException e) {

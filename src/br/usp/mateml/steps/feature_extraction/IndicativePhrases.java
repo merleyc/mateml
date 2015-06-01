@@ -20,9 +20,9 @@ public class IndicativePhrases {
 	public HashMap<String, Boolean> obterExprIndicativas(
 			ConfigurationLoader configuration, PretextLoader pretextLoader) {
 
-		String caminhoCorpus = configuration.getCaminhoCorpus();
-		String caminhoArqExpIndicativas = configuration.getCaminhoExpressoesIndicativas();
-		String caminhoPretextStem = configuration.getCaminhoPretextStem();
+		String caminhoCorpus = configuration.getPathCorpus();
+		String caminhoArqExpIndicativas = configuration.getPathExpressoesIndicativas();
+		String caminhoPretextStem = configuration.getPathPretextStem();
 		
 		if (!Util.arquivoOK(caminhoArqExpIndicativas)) {
 			System.out.println("Erro com o arquivo de entrada de expressoes indicativas.");

@@ -9,65 +9,67 @@ import java.util.StringTokenizer;
 
 
 public class ConfigurationLoader {
-	private String caminhoCorpus = "";
-	private String caminhoPretext1 = "";
-	private String caminhoPretext2 = "";
-	private String caminhoPretext3 = "";
-	private String caminhoPretextData = "";
-	private String caminhoPretextName = "";
-	private String caminhoPretextStem = "";
-	private String caminhoPretextMaid = "";
-	private String caminhoStoplist = "";
-	private String caminhoCorpusGeral = "";
-	private String caminhoExpressoesIndicativas = "";
-	private int janelaNCvalue = -1;
-	private String caminhoParserPalavras = "";
-	private String caminhoListaReferencia = "";
-	private String caminhoXmlTaxonomia = "";
-	private String caminhoSaida = "";
-	private String caminhoParametros = "./data/";
+	private String pathCorpus = "";
+	private String pathPretext = "";
+	private String pathPretextData = "";
+	private String pathPretextName = "";
+	private String pathPretextStem = "";
+	private String pathPretextMaid = "";
+	private String pathStoplist = "";
+	private String pathGeneralCorpus = "";
+	private String pathIndicativePhrases = "";
+	private int window_NCvalue = -1;
+	private String pathParser = "";
+	private String pathReferenceList = "";
+	private String pathXml_taxonomy = "";
+	private String pathOutput = "";
+	private String pathParameters = "./data/";
 
-	private boolean criarArqsPretext = false;
-	private String language = ""; // options ingl, port or esp
+	private boolean needCreatePretextFiles = false;
+	private String language = ""; // options: ingl, port, or esp
 	private boolean stemmer = false;
 	private boolean stopword = false;
-	private String caminhoStoplistIngl = "";
-	private String caminhoStoplistPort = "";
-	private String caminhoStoplistEsp= "";
-	private boolean usarDiretorioComoClasse = false; // utilizar diretorio da pasta de entrada como classe
-	private boolean FreqTrueBinarioFalse = false;
+	private boolean useDiretoryWithClass = false; // utilizar diretorio da pasta de entrada como classe
+	private boolean freqTrue_binaryFalse = false;
 
 	// temporary files for each domain:
-	public final String arqDataSemClasse = "./data/discover_sem_classe.data";
-	public final String arqMatrizEsparsa = "./data/discoveresparsaAtribDoc1Gram.txt";
-	public final String arqTfidf = "./data/saidaTfIdf.txt";
+	public final String tmp_fileDataWithoutClass = "./data/discover_withoutClass.data";
+	public final String tmp_fileSparseMatrix = "./data/discover_attribDoc_1Gram.txt";
+	public final String tmp_fileTfidf = "./data/TfIdf.txt";
 
 	// constructor
-	public ConfigurationLoader(String parameters) {
-		try {
-			loadCfg(parameters);
-		} catch (IOException e) {
-			throw new RuntimeException("Error on reading file on path: " + parameters);
-		}
+	public ConfigurationLoader(String cfgPath) {
+
+		loadCfg(cfgPath);
+
 	}
 
-	private File getCfgFile(String cfgPath) {
-		File nameCfgFile = null;
-		String[] listFile = (new File(cfgPath)).list();
+	/**
+	 * Gets cfg file considering a given path.
+	 * @param pathCfg path of cfg file.
+	 * @return path + name of cfg file.
+	 */
+	private File getCfgFile(String pathCfg) {
+		if (pathCfg == null || pathCfg.isEmpty()) {
+			throw new IllegalArgumentException("No information given about cfg file.");
+		}
+
+		File nameFileCfg = null;
+		String[] listFile = (new File(pathCfg)).list();
 
 		if (listFile != null) {
 			for (int index = 0; index < listFile.length; index++) {
-				nameCfgFile = new File(cfgPath + "/" + listFile[index]);
+				nameFileCfg = new File(pathCfg + "/" + listFile[index]);
 
-				if (nameCfgFile.isFile()) {
+				if (nameFileCfg.isFile()) {
 
-					if (!nameCfgFile.exists()) {
-						System.out.println("Cfg file not found: " + nameCfgFile);
+					if (!nameFileCfg.exists()) {
+						System.out.println("Cfg file not found: " + nameFileCfg);
 						break;
 					}
-					String name = nameCfgFile.getName().toLowerCase();
+					String name = nameFileCfg.getName().toLowerCase();
 					if (name.endsWith(".cfg")) {
-						return nameCfgFile;
+						return nameFileCfg;
 					}
 
 				}
@@ -78,15 +80,21 @@ public class ConfigurationLoader {
 	}
 
 	/**
-	 * Esse metodo le o arquivo de configuracao e obtem os caminhos dos arquivos de entrada.
+	 * Gets all information of cfg file, which was provided by user. 
+	 * @param pathCfg path of cfg file.
 	 */
-	private void loadCfg (String parameters) throws IOException{
-		File file = getCfgFile(parameters);
+	private void loadCfg (String pathCfg) {
+		if (pathCfg == null || pathCfg.isEmpty()) {
+			throw new IllegalArgumentException("No information given about cfg file.");
+		}
+
 		BufferedReader in = null;
 
 		try {
+			File file = getCfgFile(pathCfg);
+
 			if (file == null) {
-				throw new IllegalArgumentException("File not found.");
+				throw new IllegalArgumentException("File not found: " + pathCfg);
 			}
 
 			in = new BufferedReader(new FileReader(file));
@@ -98,241 +106,234 @@ public class ConfigurationLoader {
 					StringTokenizer st = new StringTokenizer(line,"=");
 
 					if (st.hasMoreTokens()) {
-						String nomeParametro = st.nextToken().toLowerCase().trim();
-						String valorParametro = "";
+						String nameOfParameter = st.nextToken().toLowerCase().trim();
+						String valueOfParameter = "";
 
 						if (st.hasMoreTokens()) { 
-							valorParametro = st.nextToken().trim();
+							valueOfParameter = st.nextToken().trim();
 						}
-						if (nomeParametro.equals("caminhocorpus"))
-							caminhoCorpus = valorParametro;
-						else if (nomeParametro.equals("caminhopretext1"))
-							caminhoPretext1 = valorParametro;
-						else if (nomeParametro.equals("caminhopretextdata"))
-							caminhoPretextData = valorParametro;
-						else if (nomeParametro.equals("caminhopretextname"))
-							caminhoPretextName = valorParametro;
-						else if (nomeParametro.equals("caminhopretextstem"))
-							caminhoPretextStem = valorParametro;
-						else if (nomeParametro.equals("caminhopretextmaid"))
-							caminhoPretextMaid = valorParametro;
-						else if (nomeParametro.equals("caminhostoplist"))
-							caminhoStoplist = valorParametro;
-						else if (nomeParametro.equals("caminhocorpusgeral"))
-							caminhoCorpusGeral = valorParametro;
-						else if (nomeParametro.equals("caminhoexpressoesindicativas"))
-							caminhoExpressoesIndicativas = valorParametro;
-						else if (nomeParametro.equals("janelancvalue"))
-							janelaNCvalue = Integer.parseInt(valorParametro);
-						else if (nomeParametro.equals("caminhoparserpalavras"))
-							caminhoParserPalavras = valorParametro;
-						else if (nomeParametro.equals("caminholistareferencia"))
-							caminhoListaReferencia = valorParametro;
-						else if (nomeParametro.equals("caminhoxmltaxonomia"))
-							caminhoXmlTaxonomia = valorParametro;
-						else if (nomeParametro.equals("caminhosaida"))
-							caminhoSaida = valorParametro;
+						if (nameOfParameter.trim().toLowerCase().equals("corpus")) {
+							pathCorpus = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("pretext")) {
+							pathPretext = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("pretextData")) {
+							pathPretextData = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("pretextName")) {
+							pathPretextName = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("pretextstem")) {
+							pathPretextStem = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("pretextmaid")) {
+							pathPretextMaid = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("stoplist")) {
+							pathStoplist = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("generalcorpus")) {
+							pathGeneralCorpus = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("indicativephrases")) {
+							pathIndicativePhrases = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("window")) {
+							window_NCvalue = Integer.parseInt(valueOfParameter);
+						} else if (nameOfParameter.trim().toLowerCase().equals("parser")) {
+							pathParser = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("referencelist")) {
+							pathReferenceList = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("xmltaxonomy")) {
+							pathXml_taxonomy = valueOfParameter;
+						} else if (nameOfParameter.trim().toLowerCase().equals("output")) {
+							pathOutput = valueOfParameter;
+						}
 
-
-						if (nomeParametro.equals("arquivospretext"))
-							if (valorParametro.equals("true"))
-								criarArqsPretext = true;
-						if (criarArqsPretext) {
-							if (nomeParametro.equals("stemmer")) {
-								if (valorParametro.equals("true"))
-									stemmer = true;
-								else stemmer = false;
-							}
-							else if (nomeParametro.equals("language"))
-								language = valorParametro;
-							else if (nomeParametro.equals("stopword")) {
-								if (valorParametro.equals("true"))
-									stopword = true;
-								else stopword = false;
-							}
-							else if (nomeParametro.equals("caminhostoplistingl"))
-								caminhoStoplistIngl = valorParametro;
-							else if (nomeParametro.equals("caminhostoplistport"))
-								caminhoStoplistPort = valorParametro;
-							else if (nomeParametro.equals("caminhostoplistesp"))
-								caminhoStoplistEsp= valorParametro;
-							else if (nomeParametro.equals("usardiretoriocomoclasse")) {
-								if (valorParametro.equals("true"))
-									usarDiretorioComoClasse = true;
-								else usarDiretorioComoClasse = false;
-							}
-							else if (nomeParametro.equals("freqtruebinariofalse")) {
-								if (valorParametro.equals("true"))
-									FreqTrueBinarioFalse = true;
-								else FreqTrueBinarioFalse = false;
-							}
+						if (nameOfParameter.trim().toLowerCase().equals("arquivospretext")) {
+							if (valueOfParameter.equals("true")) {
+								needCreatePretextFiles = true;
+								if (nameOfParameter.trim().toLowerCase().equals("stemmer")) {
+									if (valueOfParameter.equals("true")) {
+										stemmer = true;
+									}
+									else { stemmer = false; }
+								}
+								else if (nameOfParameter.trim().toLowerCase().equals("language")) {
+									language = valueOfParameter;
+								}
+								else if (nameOfParameter.trim().toLowerCase().equals("stopword")) {
+									if (valueOfParameter.equals("true")) {
+										stopword = true;
+									}
+									else { stopword = false; }
+								}
+								else if (nameOfParameter.trim().toLowerCase().equals("usardiretoriocomoclasse")) {
+									if (valueOfParameter.equals("true")) {
+										useDiretoryWithClass = true;
+									}
+									else { useDiretoryWithClass = false; }
+								}
+								else if (nameOfParameter.trim().toLowerCase().equals("freqtruebinariofalse")) {
+									if (valueOfParameter.equals("true")) {
+										freqTrue_binaryFalse = true;
+									}
+									else { freqTrue_binaryFalse = false; }
+								}
+							} 
 						}
 					}
 				}
 				line = in.readLine();
 			}
 
-			boolean statusParametros = validarParametros(criarArqsPretext);
-			if (!statusParametros) {
+			boolean statusParameters = validateParameters(needCreatePretextFiles);
+			if (!statusParameters) {
 				throw new RuntimeException("Invalid file content: " + file);
 			}
 
 		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException("File with extension 'cfg' not found on path: " + parameters);
+			throw new IllegalArgumentException("File with extension 'cfg' not found on path: " + pathCfg);
+		} catch (IOException e) {
+			throw new RuntimeException("Error on reading file on path: " + pathCfg);
 		} finally {
 			if (in != null) {
-				in.close();
+				try {
+					in.close();
+				} catch (IOException e) {
+					throw new RuntimeException("Error on closing file on path: " + pathCfg);
+				}
 			}
 		}
-
 	}
 
-	private boolean validarParametros(boolean criarArqsPretext) {
-		boolean statusParametros = true;
+	/**
+	 * Validates if there is enough information about inputs to continue running the extraction.
+	 * @param needCreatePretextFiles if it is necessary to create the PreText files.
+	 * @return true if have all need information; otherwise, returns false.
+	 */
+	private boolean validateParameters(boolean needCreatePretextFiles) {
+		boolean statusParameters = true;
 
-		System.out.print("--> Sobre arquivos de entrada: ");
+		System.out.print("--> Regarding input files: ");
 
-		if (caminhoCorpus.isEmpty()) {
-			System.out.print("\n\nNao ha diretorio assignado para 'CaminhoCorpus'.");
-			statusParametros = false;
+		if (pathCorpus.isEmpty()) {
+			System.out.print("\n\nThe 'pathCorpus' has not been given.");
+			statusParameters = false;
 		}
-
-
-		if (caminhoStoplist.isEmpty()) {
-			System.out.print("\nNao ha diretorio assignado para 'caminhoStoplist'.");
-			statusParametros = false;
+		if (pathStoplist.isEmpty()) {
+			System.out.print("\nThe 'pathStoplist' has not been given.");
+			statusParameters = false;
 		}
-		if (caminhoCorpusGeral.isEmpty()) {
-			System.out.print("\nNao ha diretorio assignado para 'caminhoCorpusGeral'.");
-			statusParametros = false;
+		if (pathGeneralCorpus.isEmpty()) {
+			System.out.print("\nThe 'pathCorpusGeral' has not been given.");
+			statusParameters = false;
 		}
-		if (caminhoExpressoesIndicativas.isEmpty()) {
-			System.out.print("\nNao ha diretorio assignado para 'caminhoExpressoesIndicativas'.");
-			statusParametros = false;
+		if (pathIndicativePhrases.isEmpty()) {
+			System.out.print("\nThe 'pathExpressoesIndicativas' has not been given.");
+			statusParameters = false;
 		}
-		if (caminhoParserPalavras.isEmpty()) {
-			System.out.print("\nNao ha diretorio assignado para 'caminhoParserPalavras'.");
-			statusParametros = false;
+		if (pathParser.isEmpty()) {
+			System.out.print("\nThe 'pathParserPalavras' has not been given.");
+			statusParameters = false;
 		}
-		if (caminhoListaReferencia.isEmpty()) {
-			System.out.print("\nNao ha diretorio assignado para 'caminhoListaReferencia'.");
-			statusParametros = false;
+		if (pathReferenceList.isEmpty()) {
+			System.out.print("\nThe 'pathListaReferencia' has not been given.");
+			statusParameters = false;
 		}
-		/*if (caminhoXmlTaxonomia.isEmpty()) {
-			System.out.print("\nNao ha diretorio assignado para 'caminhoXmlTaxonomia'.");
+		/*if (pathXmlTaxonomia.isEmpty()) {
+			System.out.print("\nThe 'pathXmlTaxonomia' has not been given.");
 			statusParametros = false;
 		}*/
-		if (caminhoSaida.isEmpty()) {
-			System.out.print("\nNao ha diretorio assignado para 'caminhoSaida'.");
-			statusParametros = false;
-		}		
-
-		if (criarArqsPretext) {
-			if (caminhoPretextData.isEmpty()) {
-				System.out.print("\nNao ha diretorio assignado para 'caminhoPretextData'.");
-				statusParametros = false;
+		if (pathOutput.isEmpty()) {
+			System.out.print("\nThe 'pathSaida' has not been given.");
+			statusParameters = false;
+		}
+		
+		if (needCreatePretextFiles) {
+			if (pathPretextData.isEmpty()) {
+				System.out.print("\nThe 'pathPretextData' has not been given.");
+				statusParameters = false;
 			}
-			if (caminhoPretextName.isEmpty()) {
-				System.out.print("\nNao ha diretorio assignado para 'caminhoPretextName'.");
-				statusParametros = false;
+			if (pathPretextName.isEmpty()) {
+				System.out.print("\nThe 'pathPretextName' has not been given.");
+				statusParameters = false;
 			}
-			if (caminhoPretextStem.isEmpty()) {
-				System.out.print("\nNao ha diretorio assignado para 'caminhoPretextStem'.");
-				statusParametros = false;
+			if (pathPretextStem.isEmpty()) {
+				System.out.print("\nThe 'pathPretextStem' has not been given.");
+				statusParameters = false;
 			}
-			if (caminhoPretextMaid.isEmpty()) {
-				System.out.print("\nNao ha diretorio assignado para 'caminhoPretextMaid'.");
-				statusParametros = false;
+			if (pathPretextMaid.isEmpty()) {
+				System.out.print("\nThe 'pathPretextMaid' has not been given.");
+				statusParameters = false;
 			}
 			if (language.isEmpty()) {
-				System.out.print("\nNao ha escolha para 'language'. Voce pode escolher entre 'port', para portugues, e 'engl', para ingles.");
-				statusParametros = false;
-			}
-			if (stopword) {
-				if (caminhoStoplistIngl.isEmpty() && caminhoStoplistPort.isEmpty() && caminhoStoplistPort.isEmpty()) {
-					System.out.print("\nNao ha diretorio assignado para 'stopword' para criar os arquivos similares aos da PreTexT.");
-					statusParametros = false;
-				}
+				System.out.print("\n'language' has not been chosen. You can choose between 'port' (Portuguese) or 'ingl' (English).");
+				statusParameters = false;
 			}
 		}			
 
-		if (statusParametros)
-			System.out.print(" nenhum problema constatado");
+		if (statusParameters)
+			System.out.print("Everything seems to be okay.");
 		System.out.println("\n");
 
-		return statusParametros;
+		return statusParameters;
 	}
 
-	public String getCaminhoCorpus() {
-		return caminhoCorpus;
+	public String getPathCorpus() {
+		return pathCorpus;
 	}
 
-	public String getCaminhoPretext1() {
-		return caminhoPretext1;
+	public String getPathPretext() {
+		return pathPretext;
 	}
 
-	public String getCaminhoPretext2() {
-		return caminhoPretext2;
+	public String getPathPretextData() {
+		return pathPretextData;
 	}
 
-	public String getCaminhoPretext3() {
-		return caminhoPretext3;
+	public String getPathPretextName() {
+		return pathPretextName;
 	}
 
-	public String getCaminhoPretextData() {
-		return caminhoPretextData;
+	public String getPathPretextStem() {
+		return pathPretextStem;
 	}
 
-	public String getCaminhoPretextName() {
-		return caminhoPretextName;
+	public String getPathPretextMaid() {
+		return pathPretextMaid;
 	}
 
-	public String getCaminhoPretextStem() {
-		return caminhoPretextStem;
+	public String getPathStoplist() {
+		return pathStoplist;
 	}
 
-	public String getCaminhoPretextMaid() {
-		return caminhoPretextMaid;
+	public String getPathCorpusGeral() {
+		return pathGeneralCorpus;
 	}
 
-	public String getCaminhoStoplist() {
-		return caminhoStoplist;
-	}
-
-	public String getCaminhoCorpusGeral() {
-		return caminhoCorpusGeral;
-	}
-
-	public String getCaminhoExpressoesIndicativas() {
-		return caminhoExpressoesIndicativas;
+	public String getPathExpressoesIndicativas() {
+		return pathIndicativePhrases;
 	}
 
 	public int getJanelaNCvalue() {
-		return janelaNCvalue;
+		return window_NCvalue;
 	}
 
-	public String getCaminhoParserPalavras() {
-		return caminhoParserPalavras;
+	public String getPathParserPalavras() {
+		return pathParser;
 	}
 
-	public String getCaminhoListaReferencia() {
-		return caminhoListaReferencia;
+	public String getPathListaReferencia() {
+		return pathReferenceList;
 	}
 
-	public String getCaminhoXmlTaxonomia() {
-		return caminhoXmlTaxonomia;
+	public String getPathXmlTaxonomia() {
+		return pathXml_taxonomy;
 	}
 
-	public String getCaminhoSaida() {
-		return caminhoSaida;
+	public String getPathSaida() {
+		return pathOutput;
 	}
 
-	public String getCaminhoParametros() {
-		return caminhoParametros;
+	public String getPathParametros() {
+		return pathParameters;
 	}
 
 	public boolean isCriarArqsPretext() {
-		return criarArqsPretext;
+		return needCreatePretextFiles;
 	}
 
 	public String getLanguage() {
@@ -347,24 +348,12 @@ public class ConfigurationLoader {
 		return stopword;
 	}
 
-	public String getCaminhoStoplistIngl() {
-		return caminhoStoplistIngl;
-	}
-
-	public String getCaminhoStoplistPort() {
-		return caminhoStoplistPort;
-	}
-
-	public String getCaminhoStoplistEsp() {
-		return caminhoStoplistEsp;
-	}
-
 	public boolean isUsarDiretorioComoClasse() {
-		return usarDiretorioComoClasse;
+		return useDiretoryWithClass;
 	}
 
 	public boolean isFreqTrueBinarioFalse() {
-		return FreqTrueBinarioFalse;
+		return freqTrue_binaryFalse;
 	}
 
 }

@@ -31,8 +31,8 @@ public class POS {
 	public HashMap<String, Boolean> percorrerArqParser_PM(
 			ConfigurationLoader configuration, PretextLoader pretextLoader) {
 
-		String caminhoParserPalavras = configuration.getCaminhoParserPalavras();
-		String caminhoPretextStem = configuration.getCaminhoPretextStem();
+		String caminhoParserPalavras = configuration.getPathParserPalavras();
+		String caminhoPretextStem = configuration.getPathPretextStem();
 		String language = configuration.getLanguage();
 		String nomeArqTiger = "";
 		String[] lista_arq = (new File(caminhoParserPalavras)).list();
@@ -587,8 +587,8 @@ public class POS {
 	public HashMap<String, Vector<Integer>> obterTiposPalavrasOriginais(
 			ConfigurationLoader configuration, PretextLoader pretextLoader) {
 
-		String caminhoParserPalavras = configuration.getCaminhoParserPalavras();
-		String caminhoPretextStem = configuration.getCaminhoPretextStem();
+		String caminhoParserPalavras = configuration.getPathParserPalavras();
+		String caminhoPretextStem = configuration.getPathPretextStem();
 		String language = configuration.getLanguage();
 
 		HashMap<String, Vector<Pair>> stemPalavra = pretextLoader.buscarStemDePalavraTipo(

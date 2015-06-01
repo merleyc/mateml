@@ -32,15 +32,15 @@ public class DataRepresentation {
 			SpanishStemmer spanishStemmer) {
 
 		FileList fileList = new FileList();
-		fileList.ListaArquivos(new File(configuration.getCaminhoCorpus()),
+		fileList.ListaArquivos(new File(configuration.getPathCorpus()),
 				filesIn); //Vetor para armazenar os documentos textuais
 
 		//deletando documentos pre-existentes das pastas de saida:
-		Treatment.deleteFolder(new File(configuration.getCaminhoPretextData()));
-		Treatment.deleteFolder(new File(configuration.getCaminhoPretextMaid()));
-		Treatment.deleteFolder(new File(configuration.getCaminhoPretextName()));
-		Treatment.deleteFolder(new File(configuration.getCaminhoPretextStem()));
-		Treatment.deleteFolder(new File(configuration.getCaminhoPretext1()));
+		Treatment.deleteFolder(new File(configuration.getPathPretextData()));
+		Treatment.deleteFolder(new File(configuration.getPathPretextMaid()));
+		Treatment.deleteFolder(new File(configuration.getPathPretextName()));
+		Treatment.deleteFolder(new File(configuration.getPathPretextStem()));
+		Treatment.deleteFolder(new File(configuration.getPathPretext()));
 
 
 		int numDocs = 0;
@@ -132,7 +132,7 @@ public class DataRepresentation {
 		FileWriter arqData = null;
 		try{
 
-			File f = new File(configuration.getCaminhoPretextName());
+			File f = new File(configuration.getPathPretextName());
 			String path = f.getParent();
 			Treatment.criarDiretorio(path);
 			Treatment.criarArquivo(f);
@@ -147,7 +147,7 @@ public class DataRepresentation {
 			arqNames.flush();
 			arqNames.close();
 
-			f = new File(configuration.getCaminhoPretextData());
+			f = new File(configuration.getPathPretextData());
 			path = f.getParent();
 			Treatment.criarDiretorio(path);
 			Treatment.criarArquivo(f);
@@ -183,7 +183,7 @@ public class DataRepresentation {
 
 	private void gerarArquivoLogDoStemWdST() {
 		String dados = "",
-				arquivoLogStemWdST = new File(configuration.getCaminhoPretext1()).getParent() + "/arquivoLogStemWdST.txt";
+				arquivoLogStemWdST = new File(configuration.getPathPretext()).getParent() + "/arquivoLogStemWdST.txt";
 
 		if (Treatment.hashLog == null) {
 			System.out.println("O hash eh nulo e nao pode ser lido.");
@@ -280,8 +280,8 @@ public class DataRepresentation {
 			}
 		}
 
-		Treatment.gravarArquivoGeral(configuration.getCaminhoPretextStem(), linhaArqStem);
-		Treatment.gravarArquivoGeral(configuration.getCaminhoPretext1(), linhaArqAll);
+		Treatment.gravarArquivoGeral(configuration.getPathPretextStem(), linhaArqStem);
+		Treatment.gravarArquivoGeral(configuration.getPathPretext(), linhaArqAll);
 	}
 
 }

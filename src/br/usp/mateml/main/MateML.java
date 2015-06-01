@@ -40,15 +40,15 @@ public class MateML {
 		System.out.println("Help is coming soon...");
 	}
 
-	private void loadCfgFile(String cfgPath) {
-		GlobalVariables.loadConfiguration(cfgPath);
+	private void loadCfgFile(String pathCfg) {
+		GlobalVariables.loadConfiguration(pathCfg);
 	}
 
 	private void preprocessTexts() {
 		WordProcessor processadorDePalavras = new WordProcessor();
 		SpanishStemmer spanishStemmer = new SpanishStemmer();
 
-		GlobalVariables.loadStoplist(GlobalVariables.configuration.getCaminhoStoplist());
+		GlobalVariables.loadStoplist(GlobalVariables.configuration.getPathStoplist());
 
 		if (GlobalVariables.configuration.isCriarArqsPretext()) {
 			//StopWords sw = new StopWords(CarregadorConfiguracoes.language); //Objeto para remocao das stopwords dos documentos
@@ -64,7 +64,7 @@ public class MateML {
 	private void extractFeatures() {
 		PretextLoader pretextLoader = new PretextLoader();
 
-		GlobalVariables.loadCandidates(1, GlobalVariables.configuration.getCaminhoPretext1());
+		GlobalVariables.loadCandidates(1, GlobalVariables.configuration.getPathPretext());
 
 		if (!GlobalVariables.candidates.hashCandidatesIsEmpty()) {
 			System.out.println("Candidate term loaded.");

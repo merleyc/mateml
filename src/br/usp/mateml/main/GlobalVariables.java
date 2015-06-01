@@ -13,9 +13,9 @@ public class GlobalVariables {
 	public static StoplistLoader stoplist;
 	public static Candidates candidates;
 	
-	public static void loadConfiguration(String pathCfgFile) {
+	public static void loadConfiguration(String cfgPath) {
 		if (configuration == null) {
-			configuration = new ConfigurationLoader(pathCfgFile);
+			configuration = new ConfigurationLoader(cfgPath);
 		}
 	}
 

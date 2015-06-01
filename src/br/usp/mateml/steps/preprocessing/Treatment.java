@@ -744,7 +744,7 @@ public class Treatment {
 				iBarra = caminhoArq.lastIndexOf("\\");
 			String nomeArqSaida = caminhoArq.substring(iBarra+1, caminhoArq.length());
 
-			String caminhoSaida = GlobalVariables.configuration.getCaminhoPretextMaid();
+			String caminhoSaida = GlobalVariables.configuration.getPathPretextMaid();
 			criarDiretorio(caminhoSaida);
 
 			File arqSaida = new File (caminhoSaida + "/" + nomeArqSaida);
